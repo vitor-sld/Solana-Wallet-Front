@@ -5,7 +5,12 @@ import { useWalletStore } from "../../store/walletStore";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 
-export function ModalImport({ open, onClose }) {
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function ModalImport({ open, onClose }: ModalProps) {
   const [data, setData] = useState("");
   const navigate = useNavigate();
   const setWallet = useWalletStore((s) => s.setWallet);
@@ -16,13 +21,26 @@ export function ModalImport({ open, onClose }) {
     try {
       let wallet;
 
+      // Seed phrase
       if (data.trim().split(" ").length >= 12) {
         wallet = ethers.Wallet.fromPhrase(data.trim());
-      } else {
+      } 
+      // Private key
+      else {
         wallet = new ethers.Wallet(data.trim());
       }
 
-      setWallet("Imported Wallet", wallet.privateKey, wallet.address, wallet.mnemonic?.phrase ?? "");
+      // ⚠ Correção importante para ethers v6
+      const hdWallet = wallet as any;
+      const seed = hdWallet.mnemonic?.phrase || "";
+
+      setWallet(
+        "Imported Wallet",
+        wallet.privateKey,
+        wallet.address,
+        seed
+      );
+
       navigate("/wallet");
 
     } catch {

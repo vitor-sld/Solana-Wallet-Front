@@ -5,7 +5,12 @@ import { ethers } from "ethers";
 import { useWalletStore } from "../../store/walletStore";
 import { useNavigate } from "react-router-dom";
 
-export function ModalCreate({ open, onClose }) {
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function ModalCreate({ open, onClose }: ModalProps) {
   if (!open) return null;
 
   const [name, setName] = useState("");

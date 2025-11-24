@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { fontSizes, sizes } from "../../styles";
+import { fontSizes } from "../../styles";
 
 export const Container = styled.section`
   min-height: 100vh;

@@ -11,7 +11,7 @@ export const Section = styled.section`
 
 export const Container = styled.div`
   margin: 0 auto;
-  max-width: ${sizes.maxWidthLarge || "1200px"};
+  max-width: ${sizes.maxWidth || "1200px"};
   width: 100%;
 `;
 
