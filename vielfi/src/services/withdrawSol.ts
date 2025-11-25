@@ -1,16 +1,11 @@
-export async function withdrawSol(to: string, amount: number) {
-  try {
-    const res = await fetch("http://localhost:3001/withdraw/sol", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to, amount }),
-    });
+// src/services/withdrawSol.ts
+import { postJSON } from "./api";
 
-    const data = await res.json();
-    return data;
-
-  } catch (error) {
-    console.error("Withdraw error:", error);
-    return { success: false, error: "Network error" };
-  }
+export async function withdrawSol(userId: string, passphrase: string, destination: string, amount: number) {
+  return await postJSON("/withdraw/sol", {
+    userId,
+    passphrase,
+    destination,
+    amount
+  });
 }

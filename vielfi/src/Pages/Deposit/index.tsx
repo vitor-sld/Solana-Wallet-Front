@@ -1,58 +1,86 @@
-import { useWalletStore } from "../../store/walletStore";
-import { Header } from "../../Components/Header";
-import { Footer } from "../../Components/Footer";
-import * as S from "./styles";
+import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-import { PrimaryButton } from "../../styles";
+import { postJSON } from "../../services/api";
+import { Container, Card, QRWrapper, AddressBox, InfoText } from "./styles";
+import { Header } from "../../Components/Header";
 
 export default function Deposit() {
-  const { address } = useWalletStore();
+  const [pubkey, setPubkey] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
-  if (!address) {
-    return (
-      <>
-        <Header />
-        <S.Container>
-          <S.Card>
-            <h1>No wallet found</h1>
-            <p>Please create or import a Solana wallet first.</p>
-          </S.Card>
-        </S.Container>
-        <Footer />
-      </>
-    );
+  useEffect(() => {
+    async function load() {
+      try {
+        const userId = import.meta.env.VITE_USER_ID;
+        const res = await postJSON("/user/balance", { userId });
+        setPubkey(res.pubkey);
+      } catch (e) {
+        console.error("Error loading pubkey", e);
+      }
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  function copyAddress() {
+    navigator.clipboard.writeText(pubkey);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
-
-  const copyAddress = () => navigator.clipboard.writeText(address);
 
   return (
     <>
-      <Header />
+    <Header />
+    <Container>
+      <Card>
+        <h1>Deposit</h1>
+        <p>Send SOL to your personal wallet address below:</p>
 
-      <S.Container>
-        <S.Card>
-          <h1>Deposit SOL</h1>
-          <p>Send SOL to your personal deposit address</p>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <QRWrapper>
+              <QRCode
+                size={180}
+                style={{ height: "180px", width: "180px" }}
+                value={pubkey}
+              />
+            </QRWrapper>
 
-          <S.QRWrapper>
-            <QRCode value={address} size={180} />
-          </S.QRWrapper>
+            <AddressBox>
+              <strong>Wallet Address</strong>
+              <p>{pubkey}</p>
+            </AddressBox>
 
-          <S.AddressBox>
-            <strong>Your SOL Address</strong>
-            <p>{address}</p>
-            <PrimaryButton className="btn-sm" onClick={copyAddress}>
-              Copy Address
-            </PrimaryButton>
-          </S.AddressBox>
+            <button
+              onClick={copyAddress}
+              style={{
+                marginTop: "20px",
+                width: "100%",
+                padding: "14px",
+                borderRadius: "10px",
+                border: "none",
+                cursor: "pointer",
+                background:
+                  "linear-gradient(135deg, #b026ff, #7d00ff, #5500c8)",
+                color: "white",
+                fontWeight: 600,
+                fontSize: "1rem",
+                boxShadow: "0 0 18px rgba(157, 78, 221, 0.35)",
+              }}
+            >
+              {copied ? "Copied!" : "Copy Address"}
+            </button>
 
-          <S.InfoText>
-            Deposits are generally confirmed in less than 5 seconds.
-          </S.InfoText>
-        </S.Card>
-      </S.Container>
-
-      <Footer />
+            <InfoText>
+              The system will automatically detect new deposits.
+            </InfoText>
+          </>
+        )}
+      </Card>
+    </Container>
     </>
   );
 }
