@@ -1,9 +1,12 @@
 import { useState, useMemo } from "react";
 import * as S from "./styles";
 import { PrimaryButton } from "../../styles";
-import { ethers } from "ethers";
 import { useWalletStore } from "../../store/walletStore";
 import { useNavigate } from "react-router-dom";
+
+import * as bip39 from "bip39";
+import nacl from "tweetnacl";
+import bs58 from "bs58";
 
 interface ModalProps {
   open: boolean;
@@ -20,12 +23,20 @@ export function ModalCreate({ open, onClose }: ModalProps) {
   const navigate = useNavigate();
   const setWallet = useWalletStore((s) => s.setWallet);
 
-  // ❗ GERA APENAS UMA VEZ
-  const wallet = useMemo(() => ethers.Wallet.createRandom(), []);
+  // Gera wallet Solana
+  const wallet = useMemo(() => {
+    const mnemonic = bip39.generateMnemonic(128);
+    const seed = bip39.mnemonicToSeedSync(mnemonic).subarray(0, 32);
 
-  const seed = wallet.mnemonic?.phrase ?? "";
+    const keypair = nacl.sign.keyPair.fromSeed(seed);
 
-  const copy = (text: string) => navigator.clipboard.writeText(text);
+    const publicKey = bs58.encode(keypair.publicKey);
+    const secretKey = bs58.encode(keypair.secretKey);
+
+    return { mnemonic, publicKey, secretKey };
+  }, []);
+
+  const handleCopy = (text: string) => navigator.clipboard.writeText(text);
 
   const handleCreate = () => {
     if (!name.trim() || !checked) {
@@ -33,14 +44,14 @@ export function ModalCreate({ open, onClose }: ModalProps) {
       return;
     }
 
-    setWallet(name, wallet.privateKey, wallet.address, seed);
+    setWallet(name, wallet.secretKey, wallet.publicKey, wallet.mnemonic);
     navigate("/wallet");
   };
 
   return (
     <S.Overlay onClick={onClose}>
       <S.ModalContainer onClick={(e) => e.stopPropagation()} error={error}>
-        <h2>Create Wallet</h2>
+        <h2>Create Wallet (Solana)</h2>
 
         <S.Input
           placeholder="Wallet name..."
@@ -55,8 +66,8 @@ export function ModalCreate({ open, onClose }: ModalProps) {
         <h3>Seed Phrase</h3>
 
         <S.SeedBox>
-          <p>{seed}</p>
-          <button onClick={() => copy(seed)}>Copy</button>
+          <p>{wallet.mnemonic}</p>
+          <button onClick={() => handleCopy(wallet.mnemonic)}>Copy</button>
         </S.SeedBox>
 
         <S.CheckRow className={error && !checked ? "error" : ""}>
@@ -79,10 +90,7 @@ export function ModalCreate({ open, onClose }: ModalProps) {
 
         <S.Actions>
           <S.SecondaryButton onClick={onClose}>Cancel</S.SecondaryButton>
-
-          <PrimaryButton onClick={handleCreate}>
-            Create →
-          </PrimaryButton>
+          <PrimaryButton onClick={handleCreate}>Create →</PrimaryButton>
         </S.Actions>
       </S.ModalContainer>
     </S.Overlay>

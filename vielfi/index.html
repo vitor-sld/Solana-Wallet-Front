@@ -4,13 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Great+Vibes&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Great+Vibes&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <title>vielfi</title>
+
+    <!-- SOLANA + SPL BUFFER POLYFILLS -->
+    <script>
+      // Necessário para libs Node-like rodarem no browser
+      window.global = window;
+    </script>
+
+    <script type="module">
+      import { Buffer } from "buffer";
+      window.Buffer = Buffer;   // garante que SPL-Token funcione
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
+
+    <!-- ESTE DEVE VIR SEMPRE APÓS OS POLYFILLS -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

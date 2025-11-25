@@ -1,71 +1,58 @@
-import { useEffect, useState } from "react";
 import { useWalletStore } from "../../store/walletStore";
+import { Header } from "../../Components/Header";
+import { Footer } from "../../Components/Footer";
 import * as S from "./styles";
 import QRCode from "react-qr-code";
-import { nanoid } from "nanoid";
-import { useNavigate } from "react-router-dom";
+import { PrimaryButton } from "../../styles";
 
-export function Deposit() {
-  const navigate = useNavigate();
+export default function Deposit() {
+  const { address } = useWalletStore();
 
-  const depositAddress = useWalletStore((s) => s.depositAddress);
-  const setDepositAddress = useWalletStore((s) => s.setDepositAddress);
-  const setBalance = useWalletStore((s) => s.setBalance);
+  if (!address) {
+    return (
+      <>
+        <Header />
+        <S.Container>
+          <S.Card>
+            <h1>No wallet found</h1>
+            <p>Please create or import a Solana wallet first.</p>
+          </S.Card>
+        </S.Container>
+        <Footer />
+      </>
+    );
+  }
 
-  const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState("Waiting for deposit...");
-
-  // Criar endereço único ao entrar
-  useEffect(() => {
-    if (!depositAddress) {
-      const addr = "0x" + nanoid(32);
-      setDepositAddress(addr);
-    }
-  }, []);
-
-  // Simulação do fluxo de depósito
-  useEffect(() => {
-    if (!depositAddress) return;
-
-    const steps = [
-      { time: 2000, text: "Transaction detected…" },
-      { time: 4000, text: "1 confirmation…" },
-      { time: 6000, text: "2 confirmations…" },
-      { time: 8000, text: "Deposit complete ✔" },
-    ];
-
-    steps.forEach((step, index) => {
-      setTimeout(() => {
-        setStatus(step.text);
-        setProgress(((index + 1) / steps.length) * 100);
-
-        if (index === steps.length - 1) {
-          // aumentar saldo privado
-          setBalance(0.5); // valor simulado
-          navigate("/wallet");
-        }
-      }, step.time);
-    });
-  }, [depositAddress]);
+  const copyAddress = () => navigator.clipboard.writeText(address);
 
   return (
-    <S.Container>
-      <h1>Deposit</h1>
+    <>
+      <Header />
 
-      <p>Send ETH to your private deposit address:</p>
+      <S.Container>
+        <S.Card>
+          <h1>Deposit SOL</h1>
+          <p>Send SOL to your personal deposit address</p>
 
-      <S.AddressBox>{depositAddress}</S.AddressBox>
+          <S.QRWrapper>
+            <QRCode value={address} size={180} />
+          </S.QRWrapper>
 
-      <QRCode
-        value={depositAddress || ""}
-        style={{ width: "200px", height: "200px", margin: "20px auto" }}
-      />
+          <S.AddressBox>
+            <strong>Your SOL Address</strong>
+            <p>{address}</p>
+            <PrimaryButton className="btn-sm" onClick={copyAddress}>
+              Copy Address
+            </PrimaryButton>
+          </S.AddressBox>
 
-      <S.Progress>
-        <div style={{ width: `${progress}%` }} />
-      </S.Progress>
+          <S.InfoText>
+            Deposits are generally confirmed in less than 5 seconds.
+          </S.InfoText>
+        </S.Card>
+      </S.Container>
 
-      <p>{status}</p>
-    </S.Container>
+      <Footer />
+    </>
   );
 }
