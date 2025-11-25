@@ -11,7 +11,7 @@ export const TOKENS = {
     symbol: "USDC",
     name: "USD Coin",
     decimals: 6,
-    mint: "EPjFWdd5AufqSSqeM2qHkBKaN9AJ5pX8haWH9PQV6XsD",
+    mint: "Es9vMFrzaCERz9fF7kbZwiRBK1tZ3xCynNw8E8thdGJ",
     isNative: false,
   },
 
@@ -19,7 +19,7 @@ export const TOKENS = {
     symbol: "VEIL",
     name: "Veil Token",
     decimals: 9,
-    mint: "8Vh2rU5cA6g1qvYyJucFr7TPYfbqaDWGQoJGv8L4B3he", // trocar depois
+    mint: "2J8bP35XdfmRZCTj7WUdZ4TQGqaXcFj4kd6rpLYxpump", // trocar depois
     isNative: false,
   },
 };

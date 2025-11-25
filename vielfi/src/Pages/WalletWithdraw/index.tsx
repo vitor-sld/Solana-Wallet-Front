@@ -1,75 +1,86 @@
 import { useState } from "react";
 import * as S from "./styles";
 import { withdrawSol } from "../../services/withdrawSol";
-import { useToast } from "../../Components/Toast";
-import { useActivityStore } from "../../store/activityStore";
 import { PrimaryButton } from "../../styles";
 
-export default function WalletWithdraw() {
-  const [to, setTo] = useState("");
-  const [amount, setAmount] = useState<number>(0);
+export function WalletWithdraw() {
+  const userId = import.meta.env.VITE_USER_ID;
+
+  const [destination, setDestination] = useState("");
+  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { showToast } = useToast();
-  const addActivity = useActivityStore((s) => s.addActivity);
+  const [destinationError, setDestinationError] = useState(false);
+  const [amountError, setAmountError] = useState(false);
+
+  const validate = () => {
+    let ok = true;
+
+    if (destination.trim().length < 32) {
+      setDestinationError(true);
+      ok = false;
+    } else setDestinationError(false);
+
+    if (!amount || Number(amount) <= 0) {
+      setAmountError(true);
+      ok = false;
+    } else setAmountError(false);
+
+    return ok;
+  };
 
   const handleWithdraw = async () => {
-    if (!to || amount <= 0) {
-      showToast("Please enter a valid destination address and amount.", "error");
-      return;
-    }
+    if (!validate()) return;
 
     setLoading(true);
+    try {
+      const res = await withdrawSol(
+        userId,
+        destination,
+        parseFloat(amount)
+      );
 
-    const response = await withdrawSol(to, amount);
-    setLoading(false);
-
-    if (!response.success) {
-      showToast(response.error || "Withdraw failed.", "error");
-      return;
+      alert("Saque enviado!\nTx: " + res.signature);
+    } catch (err: any) {
+      console.error(err);
+      alert("Erro ao sacar: " + err?.message);
     }
-
-    // Add to activity history
-    addActivity({
-      type: "withdraw",
-      amount,
-      signature: response.signature,
-      timestamp: Date.now(),
-    });
-
-    showToast("Withdrawal successful!", "success");
+    setLoading(false);
   };
 
   return (
     <S.Container>
       <S.Card>
         <h1>Withdraw SOL</h1>
-        <p>Send SOL to another Solana address</p>
+        <p>Envie SOL para qualquer endereço.</p>
 
         <S.Field>
-          <S.Label>Destination Address</S.Label>
+          <S.Label>Endereço de destino</S.Label>
           <S.Input
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            placeholder="Ex: UbxB...3Np"
+            placeholder="Ex: Gs9kj12D..."
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            $error={destinationError}
           />
         </S.Field>
 
         <S.Field>
-          <S.Label>Amount (SOL)</S.Label>
+          <S.Label>Valor (SOL)</S.Label>
           <S.Input
             type="number"
-            min="0"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
             placeholder="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            $error={amountError}
           />
         </S.Field>
 
-        <PrimaryButton disabled={loading} onClick={handleWithdraw}>
-          {loading ? "Processing..." : "Withdraw"}
+        <PrimaryButton onClick={handleWithdraw} disabled={loading}>
+          {loading ? "Enviando..." : "Confirmar Saque →"}
         </PrimaryButton>
       </S.Card>
     </S.Container>
   );
 }
+
+export default WalletWithdraw;

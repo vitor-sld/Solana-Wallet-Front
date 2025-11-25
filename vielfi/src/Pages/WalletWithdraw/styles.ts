@@ -40,14 +40,19 @@ export const Label = styled.label`
   margin-bottom: 6px;
 `;
 
-export const Input = styled.input`
+// 👇 AQUI ESTÁ A CORREÇÃO DO PROBLEMA
+export const Input = styled.input<{ $error?: boolean }>`
   width: 100%;
   padding: 14px;
   border-radius: 10px;
 
-  border: 1px solid color-mix(in oklab, var(--primary) 25%, transparent);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid
+    ${({ $error }) =>
+      $error
+        ? "rgba(255, 70, 70, 0.9)"
+        : "color-mix(in oklab, var(--primary) 25%, transparent)"};
 
+  background: rgba(255, 255, 255, 0.05);
   color: var(--foreground);
   font-size: ${fontSizes.medium};
 
