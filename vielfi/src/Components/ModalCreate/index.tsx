@@ -9,7 +9,7 @@ import nacl from "tweetnacl";
 import bs58 from "bs58";
 
 import { postJSON } from "../../services/api";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../context/Auth";
 
 interface Props {
   open: boolean;
@@ -23,13 +23,16 @@ export default function ModalCreate({ open, onClose }: Props) {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { saveWallet } = useAuth();
 
+  // Gera nova wallet quando o modal abre
   const wallet = useMemo(() => {
     if (!open) return null;
 
-    const mnemonic = generateMnemonic(); 
+    const mnemonic = generateMnemonic();
     const seed = mnemonicToSeedSync(mnemonic);
     const seed32 = seed.slice(0, 32);
+
     const kp = nacl.sign.keyPair.fromSeed(seed32);
 
     return {
@@ -56,24 +59,21 @@ export default function ModalCreate({ open, onClose }: Props) {
     setLoading(true);
 
     try {
-      const res = await postJSON("/auth/import", {
+      // Envia seed phrase ao backend
+      await postJSON("/auth/import", {
         input: wallet.mnemonic,
         name: name.trim(),
       });
 
-      if (res?.secretKey) {
-        localStorage.setItem("user_private_key", JSON.stringify(res.secretKey));
-      }
-      if (res?.publicKey) {
-        localStorage.setItem("user_public_key", res.publicKey);
-      }
-
-      try {
-        await refresh();
-      } catch {}
+      // Salva no AuthContext
+      saveWallet({
+        walletAddress: wallet.publicKey,
+        secretKey: wallet.secretKeyArray,
+      });
 
       onClose();
       navigate("/wallet");
+
     } catch (err: any) {
       console.error(err);
       setError(err?.message || "Failed to create wallet");
@@ -84,7 +84,7 @@ export default function ModalCreate({ open, onClose }: Props) {
 
   return (
     <S.Overlay onClick={onClose}>
-      <S.ModalContainer onClick={(e) => e.stopPropagation()}>
+      <S.ModalContainer onClick={(e) => e.stopPropagation()} error={!!error}>
         <h2>Create Wallet (Solana)</h2>
 
         <S.Input
