@@ -1,138 +1,73 @@
 import styled from "styled-components";
 
-export const PageContainer = styled.div`
-  min-height: 100vh;
-  padding: 28px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  background: var(--background);
-  color: var(--foreground);
-`;
-
-export const Box = styled.div`
-  width: 100%;
-  max-width: 640px;
-  background: rgba(13, 5, 22, 0.6);
-  border: 1px solid rgba(157, 78, 221, 0.3);
-  padding: 26px;
-  border-radius: 16px;
-  backdrop-filter: blur(4px);
-
-  h2 {
-    text-align: center;
-    margin-bottom: 18px;
-    font-size: 1.6rem;
-    font-weight: 700;
-  }
-`;
-
-export const PriceBox = styled.div`
-  background: rgba(157, 78, 221, 0.15);
-  border: 1px solid rgba(157, 78, 221, 0.35);
-  padding: 14px 18px;
+export const Container = styled.div`
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #111;
+  color: #fff;
   border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 0 20px #0004;
+`;
+
+export const Title = styled.h1`
+  font-size: 28px;
   margin-bottom: 20px;
   text-align: center;
-  font-size: 1rem;
+`;
+
+export const Label = styled.label`
+  display: block;
+  margin: 15px 0 8px;
   font-weight: 500;
-
-  strong {
-    display: block;
-    margin-top: 4px;
-    font-size: 1.1rem;
-  }
 `;
 
-export const Tabs = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
+export const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin-bottom: 10px;
+  background: #222;
+  color: #fff;
+  font-size: 16px;
 
-  button {
-    flex: 1;
-    padding: 12px 0;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.04);
-    color: #cfc6e6;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.15s ease;
-  }
-
-  button:hover {
-    background: rgba(157, 78, 221, 0.25);
-  }
-
-  .active {
-    background: rgba(157, 78, 221, 0.35);
-    border-color: rgba(157, 78, 221, 0.65);
-    color: #fff;
-    font-weight: 600;
-  }
-`;
-
-export const InputBox = styled.div`
-  margin-bottom: 18px;
-
-  label {
-    display: block;
-    margin-bottom: 6px;
-    color: #cfc6e6;
-    font-size: 0.95rem;
-  }
-
-  input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--foreground);
-    font-size: 1.05rem;
-    transition: 0.12s ease;
-  }
-
-  input:focus {
-    outline: none;
-    border-color: #9d4edd;
-    background: rgba(157, 78, 221, 0.15);
+  &:focus {
+    border: 1px solid #555;
   }
 `;
 
 export const Button = styled.button`
   width: 100%;
-  padding: 14px 0;
-  background: linear-gradient(90deg, #9d4edd, #7c3aed);
+  padding: 12px;
+  background: #6c47ff;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   color: #fff;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 17px;
   cursor: pointer;
-  transition: 0.15s ease;
-  margin-top: 6px;
+  margin-top: 10px;
 
-  &:hover:not(:disabled) {
-    filter: brightness(1.1);
-    transform: scale(0.97);
-  }
-
-  &:disabled {
-    background: rgba(255, 255, 255, 0.1);
-    cursor: not-allowed;
+  &:hover {
+    opacity: 0.9;
   }
 `;
 
-export const ResultBox = styled.div`
-  margin-top: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 14px 16px;
-  border-radius: 12px;
-  color: #e0d2ff;
-  font-size: 0.92rem;
-  text-align: center;
+export const Box = styled.div`
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 25px;
+`;
+
+export const CodeBox = styled.pre`
+  background: #000;
+  padding: 15px;
+  border-radius: 10px;
+  white-space: pre-wrap;
   word-break: break-all;
+  font-size: 14px;
+  margin-top: 10px;
 `;

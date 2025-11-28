@@ -1,19 +1,71 @@
-const API = "http://localhost:3001";
+// src/services/api.ts
 
-export async function createOrder(usdAmount, buyerWallet) {
-  const res = await fetch(`${API}/swap/buy/init`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ usdAmount, buyer: buyerWallet })
+const API_BASE = "http://localhost:3001";
+
+/**
+ * GET genérico que retorna JSON
+ * Usado pelo useAuth → getJSON("/session/me")
+ */
+export async function getJSON(path: string, options: RequestInit = {}) {
+  const res = await fetch(API_BASE + path, {
+    ...options,
+    method: "GET",
+    credentials: "include", // mantém cookies da sessão!
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
   });
+
+  if (!res.ok) {
+    throw new Error(`Erro GET ${path}: ${res.status}`);
+  }
+
   return res.json();
 }
 
-export async function confirmOrder(orderId, paymentSignature) {
-  const res = await fetch(`${API}/swap/buy/confirm`, {
+/**
+ * POST genérico para JSON
+ */
+export async function postJSON(path: string, body: any, options: RequestInit = {}) {
+  const res = await fetch(API_BASE + path, {
+    ...options,
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ orderId, paymentSignature })
+    credentials: "include", // mantém sessão do usuário
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    },
+    body: JSON.stringify(body)
   });
+
+  if (!res.ok) {
+    throw new Error(`Erro POST ${path}: ${res.status}`);
+  }
+
   return res.json();
+}
+
+/* -------------------------
+   ROTAS DA COMPRA DE VEIL
+--------------------------*/
+
+/**
+ * Criar pedido de compra
+ */
+export async function createOrder(usdAmount: number, buyerWallet: string) {
+  return postJSON("/swap/buy/init", {
+    usdAmount,
+    buyer: buyerWallet
+  });
+}
+
+/**
+ * Confirmar pagamento e enviar VEIL
+ */
+export async function confirmOrder(orderId: string, paymentSignature: string) {
+  return postJSON("/swap/buy/confirm", {
+    orderId,
+    paymentSignature
+  });
 }
