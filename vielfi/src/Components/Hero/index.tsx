@@ -39,9 +39,9 @@ export function Hero() {
           </S.Subheading>
 
           <S.Buttons>
-            {/* <PrimaryButton onClick={() => setOpenCreate(true)}>
+             <PrimaryButton onClick={() => setOpenCreate(true)}>
               Create Wallet →
-            </PrimaryButton> */}
+            </PrimaryButton> 
 
             <S.SecondaryButton onClick={() => setOpenImport(true)}>
               Import Wallet

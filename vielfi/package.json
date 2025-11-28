@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --skipLibCheck && react-scripts build",
+    "build": "tsc --skipLibCheck --noEmit && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

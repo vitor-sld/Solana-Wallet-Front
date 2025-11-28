@@ -3,8 +3,10 @@ import React, { useMemo, useState } from "react";
 import * as S from "./styles";
 import { PrimaryButton } from "../../styles";
 import { useNavigate } from "react-router-dom";
+import * as bip39 from "bip39";
 
-import { generateMnemonic, mnemonicToSeedSync } from "@scure/bip39";
+
+
 import nacl from "tweetnacl";
 import bs58 from "bs58";
 
@@ -17,6 +19,8 @@ interface Props {
 }
 
 export default function ModalCreate({ open, onClose }: Props) {
+  const mnemonic = bip39.generateMnemonic(); // 12 palavras
+const seed = bip39.mnemonicToSeedSync(mnemonic);
   const [name, setName] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,21 +30,21 @@ export default function ModalCreate({ open, onClose }: Props) {
   const { saveWallet } = useAuth();
 
   // Gera nova wallet quando o modal abre
-  const wallet = useMemo(() => {
-    if (!open) return null;
+const wallet = useMemo(() => {
+  if (!open) return null;
 
-    const mnemonic = generateMnemonic();
-    const seed = mnemonicToSeedSync(mnemonic);
-    const seed32 = seed.slice(0, 32);
+  const mnemonic = bip39.generateMnemonic(); // ✔ funciona 100%
+  const seed = bip39.mnemonicToSeedSync(mnemonic);
+  const seed32 = seed.slice(0, 32);
 
-    const kp = nacl.sign.keyPair.fromSeed(seed32);
+  const kp = nacl.sign.keyPair.fromSeed(seed32);
 
-    return {
-      mnemonic,
-      publicKey: bs58.encode(kp.publicKey),
-      secretKeyArray: Array.from(kp.secretKey),
-    };
-  }, [open]);
+  return {
+    mnemonic,
+    publicKey: bs58.encode(kp.publicKey),
+    secretKeyArray: Array.from(kp.secretKey),
+  };
+}, [open]);
 
   if (!open || !wallet) return null;
 
