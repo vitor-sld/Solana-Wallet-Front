@@ -1,43 +1,63 @@
-import { createContext, useContext, useState, useEffect } from "react";
+// src/context/Auth.tsx
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { getSession } from "../services/api";
 
 type WalletSession = {
   walletAddress: string;
-  secretKey: number[];
+  secretKey?: number[];
 };
 
 const AuthContext = createContext<any>(null);
 
-export function AuthProvider({ children }: any) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<WalletSession | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Carrega da localStorage ao iniciar
   useEffect(() => {
+    // load local saved wallet first
     const saved = localStorage.getItem("wallet");
     if (saved) {
-      setSession(JSON.parse(saved));
+      try {
+        setSession(JSON.parse(saved));
+      } catch {}
     }
+    // then sync with server session (if any)
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Salva wallet no localStorage
+  async function refresh() {
+    try {
+      const res = await getSession();
+      if (res?.ok && res.user?.walletPubkey) {
+        const serverWallet = { walletAddress: res.user.walletPubkey };
+        setSession(serverWallet);
+        localStorage.setItem("wallet", JSON.stringify(serverWallet));
+      } else {
+        // keep local if exists; otherwise clear
+        const saved = localStorage.getItem("wallet");
+        if (!saved) setSession(null);
+      }
+    } catch (err) {
+      // ignore
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function saveWallet(data: WalletSession) {
     localStorage.setItem("wallet", JSON.stringify(data));
     setSession(data);
   }
 
-  // Atualiza sessão manualmente
-  function refresh() {
-    const saved = localStorage.getItem("wallet");
-    setSession(saved ? JSON.parse(saved) : null);
-  }
-
-  // Remove wallet
   function logout() {
     localStorage.removeItem("wallet");
     setSession(null);
+    // optionally call backend logout endpoint if present
   }
 
   return (
-    <AuthContext.Provider value={{ session, saveWallet, logout, refresh }}>
+    <AuthContext.Provider value={{ session, saveWallet, logout, refresh, loading }}>
       {children}
     </AuthContext.Provider>
   );
