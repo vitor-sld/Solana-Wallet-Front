@@ -1,26 +1,33 @@
-import * as S from "./styles";
+import { useState } from "react";
 import { PrimaryButton } from "../../styles";
+import ModalCreate from "../ModalCreate";
+import ModalImport from "../ModalImport";
+import * as S from "./styles";
 import { Shield, Eye, Lock, Zap, Key, CheckCircle2 } from "lucide-react";
 
 export function PrivacyFeatures() {
+  
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
+  
   const steps = [
     {
       icon: Shield,
       title: "Shielded Balances",
       description:
-        "Your wallet balance is encrypted using zero-knowledge proofs."
+        "Your wallet balance is encrypted using zero-knowledge proofs. Only you know how much you hold."
     },
     {
       icon: Eye,
       title: "Anonymous Transactions",
       description:
-        "Send and receive without revealing sender, receiver, or amount."
+        "Send and receive without revealing sender, receiver, or amount. Complete transaction privacy."
     },
     {
       icon: Lock,
       title: "Non-Custodial Security",
       description:
-        "You control your keys — your assets never leave your possession."
+        "You control your keys, you control your funds. Your assets never leave your possession."
     },
     {
       icon: Zap,
@@ -43,7 +50,9 @@ export function PrivacyFeatures() {
   ];
 
   return (
-    <S.Section>
+    <S.Section id="privacy">
+              <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
+              <ModalImport open={openImport} onClose={() => setOpenImport(false)} />
       <S.Container>
         <S.Header>
           <h2>Built for Privacy</h2>
@@ -69,7 +78,10 @@ export function PrivacyFeatures() {
         <S.CTA>
           <h3>Ready for true privacy?</h3>
           <p>Join thousands protecting their financial privacy with Veilfi.</p>
-          <PrimaryButton>Get Started Now →</PrimaryButton>
+            <PrimaryButton onClick={() => setOpenCreate(true)}>
+              Get Started Now →
+            </PrimaryButton>
+          
         </S.CTA>
       </S.Container>
     </S.Section>

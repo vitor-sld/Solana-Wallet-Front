@@ -69,7 +69,8 @@ export default function Swap() {
     // Em vez de USD, enviamos SOL direto
     const usdFake = 1; // NÃO USADO (apenas porque a rota exige usdAmount)
 
-    const data = await createOrder({ amount: Number(usdFake), walletAddress });
+    // The API helper expects (usdAmount, buyer)
+    const data = await createOrder(Number(usdFake), walletAddress as string);
 
     // Mas sobrescrevemos o real valor em SOL usando o cálculo
     data.solToPay = solToPay;
@@ -85,7 +86,8 @@ export default function Swap() {
       return;
     }
 
-    const data = await confirmOrder({ orderId: order.orderId, paymentSig });
+    // The API helper expects (orderId, paymentSignature, buyer)
+    const data = await confirmOrder(order.orderId, paymentSig, walletAddress as string);
     setResult(data);
   };
 

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import * as S from "./styles";
 import { useAuth } from "../../hooks/useAuth";
+import { PrimaryButton } from "../../styles";
 
 export default function SendPage() {
   const auth = useAuth();
@@ -9,17 +10,7 @@ export default function SendPage() {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
-  // Add runtime type guard for `user` vs `session`
-  function hasUser(obj: any): obj is { user: { walletPubkey?: string } } {
-    return !!obj && "user" in obj;
-  }
-
-  const from = (() => {
-    if (!auth) return "";
-    if (hasUser(auth)) return auth.user?.walletPubkey ?? "";
-    return (auth as any).session?.user?.walletPubkey ?? "";
-  })();
-
+  const from = auth?.session?.walletAddress || "";
   const fromSecretKey = JSON.parse(localStorage.getItem("user_private_key") || "[]");
 
   async function handleSend() {
@@ -52,14 +43,13 @@ export default function SendPage() {
 
   return (
     <S.PageContainer>
+                  <S.NavBar>
+                    <button onClick={() => window.history.back()}>← Back</button>
+                    <h2>Deposit</h2>
+                    <h2></h2>
+                  </S.NavBar>
       <S.Box>
         <h2>Send</h2>
-
-        <S.Field>
-          <label>From</label>
-          <div className="mono">{from}</div>
-        </S.Field>
-
         <S.Field>
           <label>Destination</label>
           <input value={to} onChange={(e) => setTo(e.target.value)} />
@@ -75,9 +65,9 @@ export default function SendPage() {
 
         {error && <div style={{ color: "red" }}>{error}</div>}
 
-        <button onClick={handleSend} className="primary">
+        <PrimaryButton onClick={handleSend} className="primary big">
           Send
-        </button>
+        </PrimaryButton>
       </S.Box>
     </S.PageContainer>
   );
