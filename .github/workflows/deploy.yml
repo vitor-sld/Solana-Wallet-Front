@@ -1,4 +1,4 @@
-name: Deploy React App to Hostinger
+name: Deploy React/Vite App to Hostinger
 
 on:
   push:
@@ -10,26 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout do código
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Configura Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 3️⃣ Instala dependências
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ Build do projeto (Vite cria dist/)
       - name: Build project
         run: npm run build
 
+      # 5️⃣ Deploy via FTP
       - name: Deploy build folder to Hostinger
-        uses: samkirkland/ftp-deploy-action@v3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
-          local-dir: ./dist        # <--- VITE usa dist
-          server-dir: /public_html
+          port: ${{ secrets.FTP_PORT }}       # normalmente 21
+          local-dir: ./dist/                  # build do Vite
+          server-dir: /public_html/           # pasta no Hostinger
+          passive: true                       # modo passivo FTP
+          git-ftp-args: --verbose             # logs detalhados
