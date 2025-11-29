@@ -5,7 +5,7 @@ export const Overlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,21 +57,21 @@ export const ErrorMsg = styled.p`
 
 export const Actions = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   gap: 14px;
   margin-top: 10px;
 `;
 
 export const SecondaryButton = styled.button`
-  flex: 1;
+  width: 100px;
   padding: 14px;
   border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
   border-radius: 10px;
-  background: #181818;
+  background: transparent;
   color: var(--foreground);
   font-weight: 600;
   cursor: pointer;
-
+  
   &:hover {
     background: #222;
   }
