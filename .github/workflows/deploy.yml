@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp                         # CORRETO
           port: 21                               # CORRETO
-          local-dir: ./dist
+          local-dir: ./dist/
           server-dir: /public_html               # CORRETO
           security: loose                        # substitui "secure: false"
           dangerous-clean-slate: true
