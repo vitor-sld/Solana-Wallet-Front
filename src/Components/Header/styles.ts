@@ -157,7 +157,7 @@ export const MobileInner = styled.div`
     max-width: 420px;
   }
 
-  button {
+  button, a {
     background: none;
     border: none;
     color: white;
@@ -166,6 +166,7 @@ export const MobileInner = styled.div`
     transition: 0.2s;
     cursor: pointer;
     text-align: center;
+    text-decoration: none;
   }
 
   button:hover {
@@ -201,3 +202,23 @@ export const CloseButton = styled.button`
     transform: scale(0.98);
   }
 `;
+
+export const Button = styled.button`
+  padding: 8px 16px;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+
+  background: var(--primary);
+
+  box-shadow: 
+    0 0 20px rgba(157, 78, 221, 0.3),
+    inset 0 0 20px rgba(157, 78, 221, 0.1);
+
+  &:hover {
+    background: color-mix(in oklab, var(--primary) 90%, white);
+
+  }`

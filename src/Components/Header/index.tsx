@@ -2,9 +2,12 @@ import { useState } from "react";
 import { animate } from "framer-motion";
 import { PrimaryButton } from '../../styles';
 import * as S from './styles';
+import { Button } from "../PrivacyFeatures/styles";
+import ModalCreate from "../ModalCreate";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+    const [openCreate, setOpenCreate] = useState(false);
 
   const smoothScroll = (target: string) => {
     const element = document.querySelector(target);
@@ -24,6 +27,7 @@ export function Header() {
 
   return (
     <S.MainContainer>
+      <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
       <S.Header>
         <div>
           <nav>
@@ -46,9 +50,9 @@ export function Header() {
               <button onClick={() => smoothScroll("#docs")}>Docs</button>
             </S.Links>
 
-            <PrimaryButton className="btn-sm desktop-btn" onClick={() => smoothScroll("#app")}>
+            <S.Button>
               Launch App →
-            </PrimaryButton>
+            </S.Button>
 
             {/* BOTÃO MOBILE */}
             <S.MenuButton onClick={() => setOpen(!open)} aria-label={open ? "Close menu" : "Open menu"}>
@@ -69,18 +73,14 @@ export function Header() {
           </S.CloseButton>
 
           <div className="links">
-            <button onClick={() => smoothScroll("#features")}>Features</button>
-            <button onClick={() => smoothScroll("#security")}>Security</button>
-            <button onClick={() => smoothScroll("#privacy")}>Privacy</button>
-            <button onClick={() => smoothScroll("#docs")}>Docs</button>
+            <button onClick={() => smoothScroll("#privacy")}>Verifi</button>
+            <button onClick={() => smoothScroll("#privacy")}>Features</button>
+            <a href="https://v0-penta-docs-clone.vercel.app/" onClick={() => smoothScroll("#docs")}>Docs</a>
 
-            <PrimaryButton
-              className="btn-lg"
-              style={{ marginTop: "24px" }}
-              onClick={() => smoothScroll("#app")}
+            <S.Button
             >
               Launch App →
-            </PrimaryButton>
+            </S.Button>
           </div>
         </S.MobileInner>
       </S.MobileMenu>
