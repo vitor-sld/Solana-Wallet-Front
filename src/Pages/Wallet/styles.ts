@@ -6,7 +6,7 @@ export const PageContainer = styled.div`
   width: 100%;
   background: var(--background);
   color: var(--foreground);
-  padding: 34px 20px;
+  padding: 30px 20px;
   display: flex;
   justify-content: center;
 
@@ -16,6 +16,7 @@ export const Content = styled.div`
   width: 100%;
   max-width: 1000px;
 `;
+
 export const PasswordVisibity = styled.button`
 cursor: pointer;
 background-color: transparent;

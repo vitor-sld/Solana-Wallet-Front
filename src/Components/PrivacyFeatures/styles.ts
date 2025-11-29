@@ -23,6 +23,12 @@ export const Container = styled.div`
   width: 100%;
 `;
 
+export const Button = styled.button`
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+`
+
 /* HEADER */
 export const Header = styled.div`
   text-align: center;

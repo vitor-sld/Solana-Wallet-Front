@@ -12,7 +12,7 @@ export const MainHeroContent = styled.section`
   padding-right: 6%;
   width: 100%;
   overflow: hidden;
-  min-height: 90vh;
+  min-height: 100vh;
 
   /* Gradiente principal */
   background: linear-gradient(
@@ -108,9 +108,9 @@ export const MainHeading = styled.h1`
 
 /* Subtítulo */
 export const Subheading = styled.p`
-  font-size: ${fontSizes.medium};
+  font-size: ${fontSizes.large};
   color: var(--muted-foreground);
-  max-width: 720px;
+  max-width: 700px;
   margin: 0 auto 48px auto;
   line-height: 1.6;
 `;

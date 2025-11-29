@@ -22,7 +22,7 @@ export const fontSizes = {
   medium: "1rem",
   large: "1.25rem",
   xlarge: "2rem",
-  xxlarge: "3rem",
+  xxlarge: "5rem",
 };
 
 export const fonts = {
