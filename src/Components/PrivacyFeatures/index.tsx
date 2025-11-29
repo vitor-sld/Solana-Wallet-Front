@@ -15,19 +15,19 @@ export function PrivacyFeatures() {
       icon: Shield,
       title: "Shielded Balances",
       description:
-        "Your wallet balance is encrypted using zero-knowledge proofs."
+        "Your wallet balance is encrypted using zero-knowledge proofs. Only you know how much you hold."
     },
     {
       icon: Eye,
       title: "Anonymous Transactions",
       description:
-        "Send and receive without revealing sender, receiver, or amount."
+        "Send and receive without revealing sender, receiver, or amount. Complete transaction privacy."
     },
     {
       icon: Lock,
       title: "Non-Custodial Security",
       description:
-        "You control your keys — your assets never leave your possession."
+        "You control your keys, you control your funds. Your assets never leave your possession."
     },
     {
       icon: Zap,

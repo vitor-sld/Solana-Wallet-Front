@@ -20,9 +20,9 @@ export const glow = {
 export const fontSizes = {
   small: "0.875rem",
   medium: "1rem",
-  large: "1.25rem",
-  xlarge: "2rem",
-  xxlarge: "5rem",
+  large: "1.20rem",
+  xlarge: "3rem",
+  xxlarge: "4.2rem",
 };
 
 export const fonts = {

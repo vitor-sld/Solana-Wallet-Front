@@ -6,7 +6,7 @@ export function HowItWorks() {
       number: "1",
       title: "Deposit",
       description:
-        "Send crypto to your single-use address. Your deposit automatically transfers to the private pool.",
+       "Send SOL to your unique single-use address. Your deposit automatically transfers to our shielded pool.",
       gradient:
         "linear-gradient(135deg, color-mix(in oklab, var(--primary) 20%, transparent), transparent)"
     },
@@ -14,7 +14,7 @@ export function HowItWorks() {
       number: "2",
       title: "Shield",
       description:
-        "Your balance becomes private using zero-knowledge proofs.",
+        "Your balance becomes completely private using zero-knowledge proofs. No one can track your holdings.",
       gradient:
         "linear-gradient(135deg, #9d4edd33, transparent)"
     },
@@ -22,7 +22,7 @@ export function HowItWorks() {
       number: "3",
       title: "Transact",
       description:
-        "Send and receive with complete anonymity.",
+        "Send and receive with complete anonymity. Transaction details remain encrypted and unlinkable..",
       gradient:
         "linear-gradient(135deg, #9d4edd55, transparent)"
     }

@@ -195,13 +195,13 @@ export default function WalletPage() {
               <div className="subtitle">Transfer SOL</div>
             </S.ActionButton>
 
-            <S.ActionButton to="/swap">
+            {/* <S.ActionButton to="/swap">
               <S.ActionIcon className="purple">
                 <ArrowRightLeft />
               </S.ActionIcon>
               <div className="title">Swap</div>
               <div className="subtitle">Exchange for VEIL</div>
-            </S.ActionButton>
+            </S.ActionButton> */}
           </S.ActionGrid>
 
           {/* ============================================================== */}

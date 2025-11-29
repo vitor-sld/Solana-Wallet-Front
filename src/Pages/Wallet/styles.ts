@@ -152,7 +152,7 @@ export const PasswordVisibity = styled.button`
 export const ActionGrid = styled.div`
   margin-top: 30px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 
   @media (max-width: 600px) {

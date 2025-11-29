@@ -49,7 +49,7 @@ export const Header = styled.div`
   margin-bottom: 64px;
 
   h2 {
-    font-size: ${fontSizes.xxlarge};
+    font-size: ${fontSizes.xlarge};
     font-weight: bold;
     color: var(--foreground);
     margin-bottom: 16px;

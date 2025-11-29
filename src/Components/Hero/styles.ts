@@ -113,6 +113,8 @@ export const MainHeading = styled.h1`
   line-height: 1.2;
   text-wrap: balance;
 
+  
+
   span {
     &.primary {
       color: var(--primary);
@@ -142,7 +144,7 @@ export const Subheading = styled.p`
   font-size: ${fontSizes.large};
   color: var(--muted-foreground);
   max-width: 700px;
-  margin: 0 auto 48px auto;
+  margin: 20px auto 48px auto;
   line-height: 1.6;
 
   @media (max-width: 768px) {
