@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do código
+      # 1️⃣ Checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -28,7 +28,13 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 5️⃣ Cria .htaccess para SPA React
+      # 5️⃣ Ajustar permissões localmente (pastas 755, arquivos 644)
+      - name: Fix permissions locally
+        run: |
+          find dist -type d -exec chmod 755 {} \;
+          find dist -type f -exec chmod 644 {} \;
+
+      # 6️⃣ Cria .htaccess para SPA React
       - name: Create .htaccess for SPA
         run: |
           echo "RewriteEngine On" > dist/.htaccess
@@ -38,7 +44,7 @@ jobs:
           echo "RewriteCond %{REQUEST_FILENAME} !-d" >> dist/.htaccess
           echo "RewriteRule . /index.html [L]" >> dist/.htaccess
 
-      # 6️⃣ Deploy via FTP
+      # 7️⃣ Deploy via FTP/FTPS para Hostinger (ignora verificação SSL)
       - name: Deploy build folder to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
@@ -46,20 +52,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          local-dir: ./dist/
-          server-dir: /public_html/
-          protocol: ftp
+          local-dir: ./dist/        # ⬅ termina com /
+          server-dir: /public_html/ # ⬅ termina com /
+          protocol: ftps            # ⬅ se você estiver usando FTPS
+          secure: false             # ⬅ desativa verificação de certificado
           log-level: verbose
           dangerous-clean-slate: true
-
-      # 7️⃣ Ajustar permissões após deploy (pastas 755, arquivos 644)
-      - name: Fix file and folder permissions
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp
-          lftp -c "
-          open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOST }};
-          mirror -R --permissions --only-newer --verbose ./dist /public_html;
-          find /public_html -type d -exec chmod 755 {} \;
-          find /public_html -type f -exec chmod 644 {} \;
-          "
