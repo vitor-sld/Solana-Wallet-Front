@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do código
+      # 1️⃣ Checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -28,15 +28,28 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 5️⃣ Deploy via FTP
+      # 5️⃣ Cria .htaccess para SPA React
+      - name: Create .htaccess for SPA
+        run: |
+          echo "RewriteEngine On" > dist/.htaccess
+          echo "RewriteBase /" >> dist/.htaccess
+          echo "RewriteRule ^index\.html$ - [L]" >> dist/.htaccess
+          echo "RewriteCond %{REQUEST_FILENAME} !-f" >> dist/.htaccess
+          echo "RewriteCond %{REQUEST_FILENAME} !-d" >> dist/.htaccess
+          echo "RewriteRule . /index.html [L]" >> dist/.htaccess
+
+      # 6️⃣ Deploy via FTP
       - name: Deploy build folder to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}       # normalmente 21
-          local-dir: ./dist/*                 # build do Vite
-          server-dir: /public_html/           # pasta no Hostinger
-          passive: true                       # modo passivo FTP
-          git-ftp-args: --verbose             # logs detalhados
+          port: ${{ secrets.FTP_PORT }}
+          local-dir: ./dist/        # ⬅ termina com /
+          server-dir: /public_html/ # ⬅ termina com /
+          protocol: ftp             # ou ftps se suportar
+          log-level: verbose         # logs detalhados
+          dangerous-clean-slate: true # remove arquivos antigos que não existem mais no dist/
+          git-ftp-args: --insecure   # ignora erros de certificado SSL (se ftps)
+          
