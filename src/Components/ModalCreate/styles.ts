@@ -12,7 +12,11 @@ export const Overlay = styled.div`
   align-items: center;
   z-index: 999;
   animation: fadeIn 0.25s ease;
-
+  padding: 16px;
+  width: 100%;
+   box-shadow:
+    0 0 30px rgba(157, 78, 221, 0.3),
+    inset 0 0 20px rgba(157, 78, 221, 0.1);
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -22,17 +26,28 @@ export const Overlay = styled.div`
 export const Description = styled.div`
   width: 96%;
   max-width: 600px;
-font-weight:200;
-margin-bottom: 20px;
-h2{
-  font-size: 30px;
-}
+  font-weight: 200;
+  margin-bottom: 20px;
+  text-align: center;
 
-p{
-  padding-top: 10px;
-  opacity: 0.7;
-}
-`
+  h2 {
+    font-size: 28px;
+  }
+
+  p {
+    padding-top: 10px;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 22px;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+`;
 
 export const ModalContainer = styled.div<{ error?: boolean }>`
   background: var(--secondary);
@@ -41,6 +56,7 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
   border-radius: 16px;
   max-width: 600px;
   width: 96%;
+  animation: scaleIn 0.25s ease;
 
   ${({ error }) =>
     error &&
@@ -76,8 +92,11 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
     margin-bottom: 10px;
   }
 
-  p {
-    color: var(--muted-foreground);
+  @media (max-width: 480px) {
+    padding: 22px;
+    h3 {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -90,8 +109,14 @@ export const Input = styled.input`
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   color: var(--foreground);
   font-size: 1rem;
+
   &:focus {
     outline: 2px solid var(--primary);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 10px 14px;
   }
 `;
 
@@ -107,22 +132,32 @@ export const SeedBox = styled.div`
   word-break: break-word;
   position: relative;
   height: 200px;
-  font-size: 18x;
 
   button {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    padding: 6px 10px;
-    font-size: 0.8rem;
+    padding: 8px 12px;
+    font-size: 0.75rem;
     border-radius: 6px;
     background: var(--primary);
     color: #fff;
     border: none;
     cursor: pointer;
     transition: 0.25s;
+
     &:hover {
       background: color-mix(in oklab, var(--primary) 80%, white);
+    }
+  }
+
+  @media (max-width: 480px) {
+    height: 150px;
+    font-size: 0.9rem;
+
+    button {
+      padding: 6px 10px;
+      font-size: 0.7rem;
     }
   }
 `;
@@ -138,6 +173,13 @@ export const CheckRow = styled.div`
     font-size: 0.8rem;
     font-weight: 200;
     margin-top: -4px;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 480px) {
+    label {
+      font-size: 0.75rem;
+    }
   }
 
   &.error span {
@@ -149,12 +191,23 @@ export const ErrorMsg = styled.div`
   color: #ff3b3b;
   font-size: 0.9rem;
   margin-bottom: 16px;
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 export const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 export const SecondaryButton = styled.button`
@@ -169,8 +222,16 @@ export const SecondaryButton = styled.button`
   &:hover {
     background: color-mix(in oklab, var(--primary) 10%, transparent);
   }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 export const PrimaryButtonStyled = styled(PrimaryButton)`
   padding: 12px 20px;
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;

@@ -7,11 +7,12 @@ export const ModalContainer = styled.div`
   padding: 32px;
   border-radius: 16px;
   max-width: 420px;
-  width: 100%;
-  box-shadow:
+   box-shadow:
     0 0 30px rgba(157, 78, 221, 0.3),
     inset 0 0 20px rgba(157, 78, 221, 0.1);
-  animation: scaleIn 0.25s ease;
+  animation: scaleIn 0.25s ease; 
+  width: 90%;
+
   label{
   margin-bottom: 10px;
 
