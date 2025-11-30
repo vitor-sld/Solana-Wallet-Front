@@ -27,7 +27,7 @@ export default function SwapPage() {
         body: JSON.stringify({ solAmount: Number(solAmount) }),
       });
 
-      const text = await res.text(); // ← pega texto bruto
+      const text = await res.text(); // pega texto bruto
 
       if (!res.ok) {
         console.error("Quote failed:", text);
@@ -35,7 +35,7 @@ export default function SwapPage() {
         return;
       }
 
-      const data = JSON.parse(text); // ← converte só se ok
+      const data = JSON.parse(text);
       setQuote(data);
     } catch (err) {
       console.error("Quote error:", err);
@@ -79,7 +79,7 @@ export default function SwapPage() {
   }
 
   return (
-    <S.PageContainer>
+    <S.Container>
       <S.Box>
         <h1>Token Swap</h1>
 
@@ -105,6 +105,6 @@ export default function SwapPage() {
           </>
         )}
       </S.Box>
-    </S.PageContainer>
+    </S.Container>
   );
 }

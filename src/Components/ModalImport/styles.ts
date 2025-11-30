@@ -18,14 +18,6 @@ export const ModalContainer = styled.div`
 
   }
 
-  ${({ error }) =>
-    error &&
-    `
-      animation: shake 0.3s ease;
-      border-color: #ff3b3b !important;
-    `
-  }
-
   @keyframes scaleIn {
     from { transform: scale(0.92); opacity: 0; }
     to { transform: scale(1); opacity: 1; }

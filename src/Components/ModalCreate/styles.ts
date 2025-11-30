@@ -49,7 +49,7 @@ export const Description = styled.div`
   }
 `;
 
-export const ModalContainer = styled.div<{ error?: boolean }>`
+export const ModalContainer = styled.div`
   background: var(--secondary);
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   padding: 32px;
@@ -57,14 +57,7 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
   max-width: 600px;
   width: 96%;
   animation: scaleIn 0.25s ease;
-
-  ${({ error }) =>
-    error &&
-    `
-      animation: shake 0.3s ease;
-      border-color: #ff3b3b !important;
-    `
-  }
+        // @ts-ignore
 
   @keyframes scaleIn {
     from { transform: scale(0.92); opacity: 0; }

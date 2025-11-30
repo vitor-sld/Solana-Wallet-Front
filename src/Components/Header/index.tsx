@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { animate } from "framer-motion";
-import { PrimaryButton } from '../../styles';
-import * as S from './styles';
-import { Button } from "../PrivacyFeatures/styles";
+import { PrimaryButton } from "../../styles";
+import * as S from "./styles";
 import ModalCreate from "../ModalCreate";
 
-export function Header() {
-    const [open, setOpen] = useState(false);
-    const [openCreate, setOpenCreate] = useState(false);
+export default function Header() {
+  const [open, setOpen] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const smoothScroll = (target: string) => {
     const element = document.querySelector(target);
@@ -22,12 +21,14 @@ export function Header() {
       onUpdate: (v) => window.scrollTo(0, v),
     });
 
-    setOpen(false); // fecha menu mobile após navegar
+    setOpen(false);
   };
 
   return (
     <S.MainContainer>
-            <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
+      {/* MODAL DE CRIAÇÃO */}
+      <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
+
       <S.Header>
         <div>
           <nav>
@@ -37,25 +38,24 @@ export function Header() {
                 alt="Veilfi"
                 width={40}
                 height={40}
-                className="object-contain"
               />
               <span>Veilfi</span>
             </S.Logo>
 
-            {/* LINKS DESKTOP */}
             <S.Links>
               <button onClick={() => smoothScroll("#features")}>Features</button>
               <button onClick={() => smoothScroll("#privacyTech")}>Security</button>
-              <S.LinkStyled to="/docs" >Docs</S.LinkStyled>
-
+              <S.LinkStyled to="/docs">Docs</S.LinkStyled>
             </S.Links>
 
-            <PrimaryButton className="mobile-none" onClick={() => setOpenCreate(!openCreate)}>
+            <PrimaryButton className="mobile-none" onClick={() => setOpenCreate(true)}>
               launch App →
             </PrimaryButton>
 
-            {/* BOTÃO MOBILE */}
-            <S.MenuButton onClick={() => setOpen(!open)} aria-label={open ? "Close menu" : "Open menu"}>
+            <S.MenuButton
+              onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
+            >
               <span className={open ? "line open" : "line"} />
               <span className={open ? "line open" : "line"} />
               <span className={open ? "line open" : "line"} />
@@ -64,25 +64,23 @@ export function Header() {
         </div>
       </S.Header>
 
-      {/* MENU MOBILE */}
       <S.MobileMenu open={open} role="dialog" aria-modal={open}>
         <S.MobileInner>
-          {/* Botão de fechar claro e acessível no canto superior direito */}
           <S.CloseButton onClick={() => setOpen(false)} aria-label="Close menu">
             ×
           </S.CloseButton>
 
           <div className="links">
-            <button onClick={() => smoothScroll("#privacy")}>Verifi</button>
-            <button onClick={() => smoothScroll("#privacy")}>Features</button>
-            <S.LinkStyled to="/docs" >Docs</S.LinkStyled>
-           
-            <PrimaryButton onClick={() => setOpenCreate(!openCreate)}>
+            <button onClick={() => smoothScroll("#privacy")}>Privacy</button>
+            <button onClick={() => smoothScroll("#features")}>Features</button>
+            <S.LinkStyled to="/docs">Docs</S.LinkStyled>
+
+            <PrimaryButton onClick={() => setOpenCreate(true)}>
               Get Started Now →
             </PrimaryButton>
-          
           </div>
         </S.MobileInner>
       </S.MobileMenu>
     </S.MainContainer>
-  )}
+  );
+}

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Circle, Square, Ban, Lock } from "lucide-react"
-import * as S from "./styles"
+import React from "react";
+import { Circle, Square, Ban, Lock, Check } from "lucide-react";
+import * as S from "./styles";
 
 export default function CoreConcepts() {
   return (
@@ -17,16 +17,19 @@ export default function CoreConcepts() {
           code={`note = (asset_id, amount, recipient_pkd, rho, r, memo)\ncommitment = Poseidon(note)`}
           codeHasSecondLine
         />
+
         <ConceptCard
           title="Merkle Tree"
           icon="square"
-          description="Every shielded note creates a new commitment built into the on-Chain Merkle tree. This allows users to later prove membership (ownership) of a note without revealing it."
+          description="Every shielded note creates a new commitment built into the on-chain Merkle tree. This allows users to later prove membership (ownership) of a note without revealing it."
         />
+
         <ConceptCard
           title="Nullifiers"
           icon="ban"
           description="To prevent double-spends, every time a note is consumed (spent), a nullifier hash is published. Once a nullifier exists on-chain, that note can never be used again."
         />
+
         <ConceptCard
           title="Zero-Knowledge Proofs"
           icon="shield"
@@ -35,25 +38,28 @@ export default function CoreConcepts() {
         />
       </S.ListWrapper>
     </S.Section>
-  )
+  );
 }
 
 interface ConceptCardProps {
-  title: string
-  description: string
-  code?: string
-  hasList?: boolean
-  icon?: string
-  codeHasSecondLine?: boolean
+  title: string;
+  description: string;
+  code?: string;
+  hasList?: boolean;
+  icon?: IconName;
+  codeHasSecondLine?: boolean;
 }
 
+export type IconName = "orbit" | "square" | "ban" | "shield" | "check";
+
 function ConceptCard({ title, description, code, hasList, icon }: ConceptCardProps) {
-  const iconMap: Record<string, React.ReactNode> = {
+  const iconMap: Record<IconName, React.ReactNode> = {
     orbit: <Circle size={20} color="#a855f7" />,
     square: <Square size={20} color="#a855f7" />,
     ban: <Ban size={20} color="#a855f7" />,
     shield: <Lock size={20} color="#a855f7" />,
-  }
+    check: <Check size={20} color="#a855f7" />,
+  };
 
   return (
     <S.Card>
@@ -83,5 +89,5 @@ function ConceptCard({ title, description, code, hasList, icon }: ConceptCardPro
         </S.List>
       )}
     </S.Card>
-  )
+  );
 }

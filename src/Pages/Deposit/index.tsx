@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as S from "./styles";
 import QRCode from "react-qr-code";
-import { useAuth } from "../../context/Auth"; // usa o Auth real
+import { useAuth } from "../../context/Auth";
 
 /**
  * Deposit Page completo
  * - polling seguro a cada 30s
- * - botão "Atualizar agora"
  * - retry/backoff para 429
  * - evita chamadas concorrentes
  */
@@ -25,12 +24,11 @@ async function rawFetchWithRetry(
   retryDelay = INITIAL_RETRY_DELAY
 ) {
   const url = `${API}${path}`;
+
   const res = await fetch(url, {
     method: options.method ?? "GET",
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
@@ -41,10 +39,11 @@ async function rawFetchWithRetry(
   }
 
   const text = await res.text().catch(() => "");
-  let json = null;
+  let json: any = null;
+
   try {
     json = text ? JSON.parse(text) : null;
-  } catch { }
+  } catch {}
 
   if (!res.ok) {
     const errMsg = json?.error ?? json?.message ?? `HTTP ${res.status}`;
@@ -55,8 +54,8 @@ async function rawFetchWithRetry(
 }
 
 function requestSingle(key: string, path: string, options?: any) {
-  
   if (inFlight.has(key)) return inFlight.get(key)!;
+
   const p = rawFetchWithRetry(path, options)
     .then((r) => {
       inFlight.delete(key);
@@ -66,6 +65,7 @@ function requestSingle(key: string, path: string, options?: any) {
       inFlight.delete(key);
       throw err;
     });
+
   inFlight.set(key, p);
   return p;
 }
@@ -84,7 +84,6 @@ function postJSON(path: string, body: any) {
 export default function DepositPage(): React.ReactElement {
   const { session, loading: authLoading } = useAuth();
 
-  // 🚨 Fallback seguro: evita crash
   const walletAddress = session?.walletAddress ?? null;
 
   const [balance, setBalance] = useState<number | null>(null);
@@ -94,7 +93,22 @@ export default function DepositPage(): React.ReactElement {
   const isLoadingRef = useRef(false);
   const pollingRef = useRef<number | null>(null);
 
-  // carrega saldo
+  // --------------------------------------
+  // 🔥 COPY BUTTON (handleCopy + clicked)
+  // --------------------------------------
+  const [clicked, setClicked] = useState<boolean>(false);
+
+  const handleCopy = (): void => {
+    if (!walletAddress) return;
+    navigator.clipboard.writeText(walletAddress);
+    setClicked(true);
+
+    setTimeout(() => {
+      setClicked(false);
+    }, 2500);
+  };
+  // --------------------------------------
+
   async function loadOnce() {
     if (!walletAddress) return;
     if (isLoadingRef.current) return;
@@ -138,18 +152,22 @@ export default function DepositPage(): React.ReactElement {
   }, [walletAddress]);
 
   if (authLoading) {
-    return <S.PageContainer><S.Box>Carregando carteira...</S.Box></S.PageContainer>;
+    return (
+      <S.PageContainer>
+        <S.Box>Carregando carteira...</S.Box>
+      </S.PageContainer>
+    );
   }
 
   if (!walletAddress) {
     return (
       <S.PageContainer>
-
         <S.NavBar>
           <button onClick={() => window.history.back()}>← Back</button>
           <h2>Deposit</h2>
           <h2></h2>
         </S.NavBar>
+
         <S.Box>
           <h2>Nenhuma carteira conectada</h2>
           <p>Importe sua carteira para depositar SOL.</p>
@@ -160,12 +178,12 @@ export default function DepositPage(): React.ReactElement {
 
   return (
     <S.PageContainer>
-        <S.NavBar>
-          <button onClick={() => window.history.back()}>← Back</button>
-          <h2>Deposit</h2>
-          <h2></h2>
-        </S.NavBar>
-      
+      <S.NavBar>
+        <button onClick={() => window.history.back()}>← Back</button>
+        <h2>Deposit</h2>
+        <h2></h2>
+      </S.NavBar>
+
       <S.Box>
         <h1>Deposit</h1>
         <p>Send SOL to your personal wallet address:</p>
@@ -184,11 +202,9 @@ export default function DepositPage(): React.ReactElement {
             marginTop: 12,
           }}
         >
-    <button className="copy" onClick={handleCopy}>
-      {clicked ? "Clicked" : "Copy Address"}
-    </button>
-
-
+          <button className="copy" onClick={handleCopy}>
+            {clicked ? "Copied!" : "Copy Address"}
+          </button>
         </div>
 
         <h3 style={{ marginTop: 20 }}>

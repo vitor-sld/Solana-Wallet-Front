@@ -29,7 +29,9 @@ export default function WalletPage() {
   const [loadingHistory, setLoadingHistory] = useState(true);
 
   // RPC
-  const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=1581ae46-832d-4d46-bc0c-007c6269d2d9");
+  const connection = new Connection(
+    "https://mainnet.helius-rpc.com/?api-key=1581ae46-832d-4d46-bc0c-007c6269d2d9"
+  );
 
   /* ============================
        1 — FETCH BALANCE API
@@ -58,7 +60,7 @@ export default function WalletPage() {
   }, [walletAddress]);
 
   /* ============================
-       2 — FETCH HISTORY
+       2 — FETCH HISTORY (FIXED)
      ============================ */
   useEffect(() => {
     async function loadTransactions() {
@@ -75,7 +77,7 @@ export default function WalletPage() {
           limit: 10,
         });
 
-        const txs = [];
+        const txs: any[] = [];
 
         for (const sig of signatures) {
           const tx = await connection.getTransaction(sig.signature, {
@@ -87,9 +89,16 @@ export default function WalletPage() {
           const pre = tx.meta.preBalances;
           const post = tx.meta.postBalances;
 
-          const accountIndex = tx.transaction.message.accountKeys.findIndex(
+          // -----------------------------
+          // 🔥 NOVA API SOLANA
+          // -----------------------------
+          const keys = tx.transaction.message.getAccountKeys();
+          const allKeys = keys.staticAccountKeys;
+
+          const accountIndex = allKeys.findIndex(
             (k) => k.toBase58() === walletAddress
           );
+          // -----------------------------
 
           if (accountIndex === -1) continue;
 
@@ -100,7 +109,7 @@ export default function WalletPage() {
             signature: sig.signature,
             slot: sig.slot,
             time: sig.blockTime,
-            status: sig.err ? "Failed" : "Success",
+            status: tx.meta.err ? "Failed" : "Success",
             amount: diffSol,
             direction: diffSol > 0 ? "received" : "sent",
           });
@@ -132,10 +141,9 @@ export default function WalletPage() {
 
       <S.PageContainer>
         <S.Content>
-          {/* ============================================================== */}
-          {/*                           BALANCE                             */}
-          {/* ============================================================== */}
-
+          {/* ==============================
+                        BALANCE
+              ============================== */}
           <S.BalanceCard>
             <S.BalanceHeader>
               <div className="left">
@@ -174,9 +182,9 @@ export default function WalletPage() {
             </S.BalanceValue>
           </S.BalanceCard>
 
-          {/* ============================================================== */}
-          {/*                            BUTTONS                            */}
-          {/* ============================================================== */}
+          {/* ==============================
+                        BUTTONS
+              ============================== */}
 
           <S.ActionGrid>
             <S.ActionButton to="/deposit">
@@ -194,71 +202,74 @@ export default function WalletPage() {
               <div className="title">Send</div>
               <div className="subtitle">Transfer SOL</div>
             </S.ActionButton>
-             {/* <S.ActionButton to="/swap">
+
+            {/*
+            <S.ActionButton to="/swap">
               <S.ActionIcon className="purple">
                 <ArrowRightLeft />
               </S.ActionIcon>
               <div className="title">Swap</div>
               <div className="subtitle">Exchange for VEIL</div>
-            </S.ActionButton>  */}
+            </S.ActionButton>
+            */}
           </S.ActionGrid>
 
-          {/* ============================================================== */}
-          {/*                        TRANSACTION HISTORY                    */}
-          {/* ============================================================== */}
+          {/* ==============================
+                 TRANSACTION HISTORY
+              ============================== */}
 
           <S.PaymentHistory style={{ marginTop: "40px", color: "white" }}>
-          <S.BalanceCard>
+            <S.BalanceCard>
+              <S.PaymentHeader>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "12px" }}>
+                  Latest Transactions
+                </h3>
+                <S.SeeMore to={"/paymentHistory"}>
+                  See more {" ->"}
+                </S.SeeMore>
+              </S.PaymentHeader>
 
-<S.PaymentHeader>
-              <h3 style={{ fontSize: "1.2rem", marginBottom: "12px" }}>
-              Latest Transactions
-            </h3>
-            <S.SeeMore to={"/paymentHistory"}>See more {" ->"}</S.SeeMore>
-</S.PaymentHeader>
+              {loadingHistory && <p>Loading...</p>}
 
-            {loadingHistory && <p>Loading...</p>}
+              {!loadingHistory && history.length === 0 && (
+                <p>No transactions found.</p>
+              )}
 
-            {!loadingHistory && history.length === 0 && (
-              <p>No transactions found.</p>
-            )}
-
-            {history.map((tx, i) =>
-              i < 5 ? (
-                <div
-                  key={i}
-                  style={{
-                    padding: "12px",
-                    borderBottom: "1px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  <p>
-                    <strong>Status:</strong> {tx.status}
-                  </p>
-
-                  <p>
-                    <strong>Transaction type:</strong>{" "}
-                    {tx.direction === "received" ? "Received" : "Sent"}
-                  </p>
-
-                  <p>
-                    <strong>Amount:</strong>{" "}
-                    {tx.amount > 0
-                      ? `+${tx.amount.toFixed(4)} SOL`
-                      : `${tx.amount.toFixed(4)} SOL`}
-                  </p>
-
-                  {tx.time && (
+              {history.map((tx, i) =>
+                i < 5 ? (
+                  <div
+                    key={i}
+                    style={{
+                      padding: "12px",
+                      borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
                     <p>
-                      <strong>Date:</strong>{" "}
-                      {new Date(tx.time * 1000).toLocaleString()}
+                      <strong>Status:</strong> {tx.status}
                     </p>
-                  )}
-                </div>
-              ) : null
-            )}
-                      </S.BalanceCard>
 
+                    <p>
+                      <strong>Transaction type:</strong>{" "}
+                      {tx.direction === "received" ? "Received" : "Sent"}
+                    </p>
+
+                    <p>
+                      <strong>Amount:</strong>{" "}
+                      {tx.amount > 0
+                        ? `+${tx.amount.toFixed(4)} SOL`
+                        : `${tx.amount.toFixed(4)} SOL`}
+                    </p>
+
+                    {tx.time && (
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {new Date(tx.time * 1000).toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                ) : null
+              )}
+            </S.BalanceCard>
           </S.PaymentHistory>
         </S.Content>
       </S.PageContainer>
