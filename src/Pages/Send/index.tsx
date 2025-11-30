@@ -10,8 +10,13 @@ export default function SendPage() {
   const [loading, setLoading] = useState(false);
 
   async function handleSend() {
-    if (!session?.walletSecret) {
-      alert("Wallet not loaded");
+    if (!session?.walletSecret || !session?.walletAddress) {
+      alert("Your wallet is not loaded. Re-import your wallet.");
+      return;
+    }
+
+    if (!to || !amount) {
+      alert("Please fill all fields");
       return;
     }
 
@@ -19,14 +24,21 @@ export default function SendPage() {
 
     try {
       const res = await postJSON("/wallet/send", {
-        fromSecret: session.walletSecret,
-        to,
-        amount: parseFloat(amount),
+        userSecret: session.walletSecret,     // obrigatório
+        userPubkey: session.walletAddress,    // obrigatório!
+        recipient: to,                        // destino
+        amount: Number(amount),               // valor
       });
 
-      alert("Success! TX: " + res.signature);
+      if (res.error) {
+        alert("Error: " + res.error);
+        setLoading(false);
+        return;
+      }
+
+      alert("Sent! Signature: " + res.signature);
     } catch (err: any) {
-      alert("Send error: " + err.message);
+      alert("Error sending: " + err.message);
     }
 
     setLoading(false);
