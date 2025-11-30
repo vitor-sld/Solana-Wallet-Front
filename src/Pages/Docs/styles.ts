@@ -4,7 +4,6 @@ export const Section = styled.section`
   margin-bottom: 3rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 24px;
 `
 
 export const ListWrapper = styled.div`
@@ -18,6 +17,7 @@ export const Card = styled.div`
   border: 1px solid rgba(168, 85, 247, 0.2);
   border-radius: 12px;
   padding: 24px;
+  margin-top: 20px;
 `
 
 export const CardTitle = styled.h3`
@@ -27,6 +27,10 @@ export const CardTitle = styled.h3`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  &:first-child{
+    padding-top: 40px;
+  }
 `
 
 export const Description = styled.p`

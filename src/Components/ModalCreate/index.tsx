@@ -1,216 +1,141 @@
-import styled from "styled-components";
+// src/Components/ModalCreate/index.tsx
+import React, { useMemo, useState } from "react";
+import * as S from "./styles";
 import { PrimaryButton } from "../../styles";
+import { useNavigate } from "react-router-dom";
+import * as bip39 from "bip39";
 
-interface ModalProps {
-  error?: boolean;
+
+
+import nacl from "tweetnacl";
+import bs58 from "bs58";
+
+import { postJSON } from "../../services/api";
+import { useAuth } from "../../context/Auth";
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
 }
 
-export const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: #120720;
-  backdrop-filter: blur(6px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  animation: fadeIn 0.25s ease;
+export default function ModalCreate({ open, onClose }: Props) {
+  const mnemonic = bip39.generateMnemonic(); // 12 palavras
+  const seed = bip39.mnemonicToSeedSync(mnemonic);
+  const [name, setName] = useState("");
+  const [confirmed, setConfirmed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-`;
+  const navigate = useNavigate();
+  const { saveWallet } = useAuth();
 
-export const Description = styled.div`
-  width: 96%;
-  max-width: 600px;
-  font-weight: 200;
-  margin-bottom: 20px;
+  // Gera nova wallet quando o modal abre
+const wallet = useMemo(() => {
+  if (!open) return null;
 
-  h2 {
-    font-size: 30px;
-  }
+  const mnemonic = bip39.generateMnemonic(); // ✔ funciona 100%
+  const seed = bip39.mnemonicToSeedSync(mnemonic);
+  const seed32 = seed.slice(0, 32);
 
-  p {
-    padding-top: 10px;
-    opacity: 0.7;
-  }
+  const kp = nacl.sign.keyPair.fromSeed(seed32);
 
-  @media (max-width: 480px) {
-    h2 { font-size: 22px; }
-    p { font-size: 0.85rem; }
-  }
-`;
+  return {
+    mnemonic,
+    publicKey: bs58.encode(kp.publicKey),
+    secretKeyArray: Array.from(kp.secretKey),
+  };
+}, [open]);
 
-export const ModalContainer = styled.div<ModalProps>`
-  background: var(--secondary);
-  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
-  padding: 32px;
-  border-radius: 16px;
-  max-width: 600px;
-  width: 96%;
-  animation: scaleIn 0.25s ease;
+  if (!open || !wallet) return null;
 
-  ${({ error }) =>
-    error &&
-    `
-      border-color: #ff3b3b !important;
-      animation: shake 0.3s ease;
-    `
-  }
+  async function handleCreate() {
+    setError(null);
 
-  @keyframes scaleIn {
-    from { transform: scale(0.92); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  @keyframes shake {
-    0% { transform: translateX(0); }
-    20% { transform: translateX(-4px); }
-    40% { transform: translateX(4px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
-    100% { transform: translateX(0); }
-  }
-
-  h2 {
-    color: var(--foreground);
-    margin-bottom: 8px;
-    font-size: 1rem;
-  }
-
-  h3 {
-    color: var(--foreground);
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 22px;
-    h3 { font-size: 1rem; }
-  }
-`;
-
-export const Input = styled.input`
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 24px;
-  background: #111;
-  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
-  color: var(--foreground);
-  font-size: 1rem;
-
-  &:focus {
-    outline: 2px solid var(--primary);
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    padding: 10px 14px;
-  }
-`;
-
-export const SeedBox = styled.div`
-  background: #111;
-  border: 1px solid color-mix(in oklab, var(--primary) 25%, transparent);
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  color: var(--foreground);
-  font-size: 0.95rem;
-  line-height: 1.4;
-  word-break: break-word;
-  position: relative;
-  height: 200px;
-
-  button {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    padding: 8px 12px;
-    font-size: 0.75rem;
-    border-radius: 6px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: .25s;
-
-    &:hover {
-      background: color-mix(in oklab, var(--primary) 80%, white);
+    if (!name.trim()) {
+      setError("Please provide a wallet name.");
+      return;
     }
-  }
-
-  @media (max-width: 480px) {
-    height: 150px;
-    font-size: 0.9rem;
-    button {
-      padding: 6px 10px;
-      font-size: 0.7rem;
+    if (!confirmed) {
+      setError("Please confirm you saved your seed phrase.");
+      return;
     }
-  }
-`;
 
-export const CheckRow = styled.div`
-  display: flex;
-  align-items: start;
-  gap: 10px;
-  margin-bottom: 20px;
+    setLoading(true);
 
-  label {
-    color: var(--foreground);
-    font-size: 0.8rem;
-    font-weight: 200;
-    line-height: 1.3;
-    margin-top: -4px;
-  }
+    try {
+      // Envia seed phrase ao backend
+    await postJSON("/auth/import", {
+    input: JSON.stringify(wallet.secretKeyArray),
+    name: name.trim(),
+    });
 
-  &.error span {
-    color: #ff3b3b;
-  }
 
-  @media (max-width: 480px) {
-    label { font-size: 0.75rem; }
-  }
-`;
+      // Salva no AuthContext
+      saveWallet({
+        walletAddress: wallet.publicKey,
+        secretKey: wallet.secretKeyArray,
+      });
 
-export const ErrorMsg = styled.div`
-  color: #ff3b3b;
-  font-size: 0.9rem;
-  margin-bottom: 16px;
-`;
+      onClose();
+      navigate("/wallet");
 
-export const Actions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-
-    button {
-      width: 100%;
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message || "Failed to create wallet");
+    } finally {
+      setLoading(false);
     }
+
   }
-`;
 
-export const SecondaryButton = styled.button`
-  padding: 12px 20px;
-  background: transparent;
-  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
-  color: var(--foreground);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .25s;
+  return (
+    <S.Overlay >
+      <S.Description>
+        <h2>Your Seed Phrase</h2>
+        <p>Write down these 12 words in order. You'll need them to verify your backup.</p>
+        </S.Description>
+      <S.ModalContainer onClick={(e) => e.stopPropagation()} error={!!error}>
+        <h2>Create Wallet (Solana)</h2>
 
-  &:hover {
-    background: color-mix(in oklab, var(--primary) 10%, transparent);
-  }
-`;
+        <h3>Seed Phrase</h3>
 
-export const PrimaryButtonStyled = styled(PrimaryButton)`
-  padding: 12px 20px;
-`;
+        <S.Input
+          placeholder="Wallet name..."
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setError(null);
+          }}
+        />
+        <S.SeedBox>
+          <p>{wallet.mnemonic}</p>
+          <button onClick={() => navigator.clipboard.writeText(wallet.mnemonic)}>
+            Copy
+          </button>
+        </S.SeedBox>
+
+        <S.CheckRow className={error ? "error" : ""}>
+          <input
+            type="checkbox"
+            id="check"
+            checked={confirmed}
+            onChange={() => setConfirmed((s) => !s)}
+          />
+          <label htmlFor='check'>I have written down my seed phrase and stored it in a secure location. I understand that losing it means losing acess to my wallet forever</label>
+        </S.CheckRow>
+
+        {error && <S.ErrorMsg>{error}</S.ErrorMsg>}
+
+        <S.Actions>
+          <S.SecondaryButton onClick={onClose} disabled={loading}>
+            Cancel
+          </S.SecondaryButton>
+
+          <PrimaryButton onClick={handleCreate} disabled={loading}>
+            {loading ? "Creating..." : "Create →"}
+          </PrimaryButton>
+        </S.Actions>
+      </S.ModalContainer>
+    </S.Overlay>
+  );
+}

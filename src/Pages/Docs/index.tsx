@@ -3,11 +3,12 @@
 import React from "react";
 import { Circle, Square, Ban, Lock, Check } from "lucide-react";
 import * as S from "./styles";
+import { Header } from "../../Components/Header";
 
 export default function CoreConcepts() {
   return (
     <S.Section>
-      <S.SectionTitle icon="check" title="Core Concepts" />
+      <S.SectionTitle title="Core Concepts" />
 
       <S.ListWrapper>
         <ConceptCard
@@ -62,6 +63,8 @@ function ConceptCard({ title, description, code, hasList, icon }: ConceptCardPro
   };
 
   return (
+    <>
+    <S.Section>
     <S.Card>
       <S.CardTitle>
         {icon && iconMap[icon]}
@@ -89,5 +92,7 @@ function ConceptCard({ title, description, code, hasList, icon }: ConceptCardPro
         </S.List>
       )}
     </S.Card>
+    </S.Section>
+    </>
   );
 }

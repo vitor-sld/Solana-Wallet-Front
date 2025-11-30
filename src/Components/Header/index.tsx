@@ -4,7 +4,7 @@ import { PrimaryButton } from "../../styles";
 import * as S from "./styles";
 import ModalCreate from "../ModalCreate";
 
-export default function Header() {
+export function Header() {
   const [open, setOpen] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
 
@@ -21,7 +21,7 @@ export default function Header() {
       onUpdate: (v) => window.scrollTo(0, v),
     });
 
-    setOpen(false);
+    setOpen(false); // fecha menu mobile após navegar
   };
 
   return (
@@ -38,20 +38,27 @@ export default function Header() {
                 alt="Veilfi"
                 width={40}
                 height={40}
+                className="object-contain"
               />
               <span>Veilfi</span>
             </S.Logo>
 
+            {/* LINKS DESKTOP */}
             <S.Links>
               <button onClick={() => smoothScroll("#features")}>Features</button>
               <button onClick={() => smoothScroll("#privacyTech")}>Security</button>
               <S.LinkStyled to="/docs">Docs</S.LinkStyled>
             </S.Links>
 
-            <PrimaryButton className="mobile-none" onClick={() => setOpenCreate(true)}>
+            {/* BOTÃO DESKTOP */}
+            <PrimaryButton
+              className="mobile-none"
+              onClick={() => setOpenCreate(true)}
+            >
               launch App →
             </PrimaryButton>
 
+            {/* BOTÃO HAMBURGUER (MOBILE) */}
             <S.MenuButton
               onClick={() => setOpen(!open)}
               aria-label={open ? "Close menu" : "Open menu"}
@@ -64,14 +71,16 @@ export default function Header() {
         </div>
       </S.Header>
 
+      {/* MENU MOBILE */}
       <S.MobileMenu open={open} role="dialog" aria-modal={open}>
         <S.MobileInner>
+          {/* Botão para fechar menu */}
           <S.CloseButton onClick={() => setOpen(false)} aria-label="Close menu">
             ×
           </S.CloseButton>
 
           <div className="links">
-            <button onClick={() => smoothScroll("#privacy")}>Privacy</button>
+            <button onClick={() => smoothScroll("#privacy")}>Verifi</button>
             <button onClick={() => smoothScroll("#features")}>Features</button>
             <S.LinkStyled to="/docs">Docs</S.LinkStyled>
 
