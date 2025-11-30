@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
 
 export const MainContainer = styled.div`
   z-index: 10;
@@ -161,7 +163,7 @@ export const MobileInner = styled.div`
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem;
+    font-size: 18px;
     opacity: 0.95;
     transition: 0.2s;
     cursor: pointer;
@@ -173,6 +175,25 @@ export const MobileInner = styled.div`
     opacity: 1;
   }
 `;
+
+export const LinkStyled = styled(Link)`
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    opacity: 0.70;
+    transition: 0.2s;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+      &:hover {
+    opacity: 1;
+  }
+`
 
 /* Close button in top-right corner of mobile menu */
 export const CloseButton = styled.button`

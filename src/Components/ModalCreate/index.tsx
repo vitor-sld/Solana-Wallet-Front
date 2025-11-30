@@ -20,7 +20,7 @@ interface Props {
 
 export default function ModalCreate({ open, onClose }: Props) {
   const mnemonic = bip39.generateMnemonic(); // 12 palavras
-const seed = bip39.mnemonicToSeedSync(mnemonic);
+  const seed = bip39.mnemonicToSeedSync(mnemonic);
   const [name, setName] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -85,12 +85,19 @@ const wallet = useMemo(() => {
     } finally {
       setLoading(false);
     }
+
   }
 
   return (
-    <S.Overlay onClick={onClose}>
+    <S.Overlay >
+      <S.Description>
+        <h2>Your Seed Phrase</h2>
+        <p>Write down these 12 words in order. You'll need them to verify your backup.</p>
+        </S.Description>
       <S.ModalContainer onClick={(e) => e.stopPropagation()} error={!!error}>
         <h2>Create Wallet (Solana)</h2>
+
+        <h3>Seed Phrase</h3>
 
         <S.Input
           placeholder="Wallet name..."
@@ -100,9 +107,6 @@ const wallet = useMemo(() => {
             setError(null);
           }}
         />
-
-        <h3>Seed Phrase</h3>
-
         <S.SeedBox>
           <p>{wallet.mnemonic}</p>
           <button onClick={() => navigator.clipboard.writeText(wallet.mnemonic)}>
@@ -113,10 +117,11 @@ const wallet = useMemo(() => {
         <S.CheckRow className={error ? "error" : ""}>
           <input
             type="checkbox"
+            id="check"
             checked={confirmed}
             onChange={() => setConfirmed((s) => !s)}
           />
-          <span>I confirm I saved my seed phrase.</span>
+          <label htmlFor='check'>I have written down my seed phrase and stored it in a secure location. I understand that losing it means losing acess to my wallet forever</label>
         </S.CheckRow>
 
         {error && <S.ErrorMsg>{error}</S.ErrorMsg>}

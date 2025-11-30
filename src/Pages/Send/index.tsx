@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import * as S from "./styles";
 import { useAuth } from "../../hooks/useAuth";
 import { PrimaryButton } from "../../styles";
-
+import { CircleAlert  }  from "lucide-react";
 export default function SendPage() {
   const auth = useAuth();
   const [to, setTo] = useState("");
@@ -51,7 +51,7 @@ export default function SendPage() {
       <S.Box>
         <h2>Send</h2>
         <S.Field>
-          <label>Destination</label>
+          <label>Recipient address</label>
           <input value={to} onChange={(e) => setTo(e.target.value)} />
         </S.Field>
 
@@ -68,6 +68,7 @@ export default function SendPage() {
         <PrimaryButton onClick={handleSend} className="primary big">
           Send
         </PrimaryButton>
+        <S.Info><CircleAlert className="alert"/> Teste</S.Info>
       </S.Box>
     </S.PageContainer>
   );

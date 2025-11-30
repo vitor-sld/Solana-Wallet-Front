@@ -1,3 +1,6 @@
+
+
+
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -5,6 +8,7 @@ import { Link } from "react-router-dom";
 /* PAGE CONTAINER */
 /* ------------------------------- */
 export const PageContainer = styled.div`
+ background-color: #120720;
   min-height: 100vh;
   width: 100%;
   background: var(--background);
@@ -207,6 +211,7 @@ export const ActionIcon = styled.div`
   height: 52px;
   margin: 0 auto;
   border-radius: 12px;
+
   display: flex;
   justify-content: center;
   align-items: center;

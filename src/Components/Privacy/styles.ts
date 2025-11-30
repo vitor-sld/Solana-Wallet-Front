@@ -1,18 +1,13 @@
 // src/components/PrivacyFeatures/styles.ts
 import styled from "styled-components";
 import { sizes, fontSizes } from "../../styles";
-import { Link } from "react-router-dom";
 
 /* SECTION ROOT */
 export const Section = styled.section`
-  min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
   padding: 96px 24px;
-  background: linear-gradient(
-    135deg,
-    #000000 0%,
-    #1a0a2e 50%,
-    #000000 100%
-  );
   display: flex;
   align-items: center;
 
@@ -41,7 +36,13 @@ export const Container = styled.div`
 export const Button = styled.button`
   background-color: transparent;
   border: 0;
-  cursor: pointer;
+  cursor: pointer; 
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid;
+    border-color: color-mix(in oklab, var(--primary) 40%, transparent);
+
+  
 `;
 
 /* HEADER */
@@ -105,7 +106,7 @@ export const FeaturesGrid = styled.div`
 export const Card = styled.div`
   padding: 32px;
   border-radius: 24px;
-  background: color-mix(in oklab, var(--secondary) 50%, transparent);
+  background: rgba(71, 28, 28, 0.4);
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
 
   transition: 0.3s ease;
@@ -178,7 +179,13 @@ export const Description = styled.p`
 
 /* CTA BOX */
 export const CTA = styled.div`
-  background: color-mix(in oklab, var(--secondary) 50%, transparent);
+
+  background: linear-gradient(
+    135deg,
+    #000000 0%,
+    #1a0a2e 50%,
+    #000000 100%
+  );
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   border-radius: 32px;
 
@@ -225,34 +232,3 @@ export const CTA = styled.div`
     border-radius: 24px;
   }
 `;
-
-export const BtnContainer = styled.button`
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 25px;
-width: 100%;
-background-color: transparent;
-border: 0px;
-
-button:last-child{
-background-color: transparent
-}
-`
-
-export const LinkStyle = styled(Link)`
-padding: 16px 32px;
-  font-size: ${fontSizes.medium};
-  color: #ffffff;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
-
-  background: transparent;
-  text-decoration: none;
-
-  box-shadow: 
-    0 0 20px rgba(157, 78, 221, 0.3),
-    inset 0 0 20px rgba(157, 78, 221, 0.1);
-`

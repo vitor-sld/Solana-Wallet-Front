@@ -10,6 +10,9 @@ export const PageContainer = styled.div`
   align-items: center;
   background: var(--background);
   color: var(--foreground);
+  display: grid;
+  justify-content: center;
+  grid-template-rows: 100px 1fr;
 `;
 
 /* NAVBAR FIXED + RESPONSIVA */
@@ -19,6 +22,7 @@ export const NavBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  text-align: center;
   gap: 12px;
   margin-bottom: 20px;
 
@@ -48,6 +52,8 @@ export const NavBar = styled.div`
 
 /* CONTAINER PRINCIPAL AJUSTADO */
 export const Box = styled.div`
+  margin-top: -50px;
+
   background: rgba(13, 5, 22, 0.6);
   border: 1px solid rgba(157, 78, 221, 0.3);
   padding: 28px;
@@ -83,6 +89,11 @@ export const Box = styled.div`
     }
   }
 `;
+
+export const QRCodeStyled = styled(QRCode)`
+border: 10px solid white;
+border-radius: 10px;
+`
 
 /* QR CODE RESPONSIVO + CENTRALIZADO */
 export const QrWrapper = styled.div`

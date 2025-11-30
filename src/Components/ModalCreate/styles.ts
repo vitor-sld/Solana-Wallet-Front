@@ -4,9 +4,10 @@ import { PrimaryButton } from "../../styles";
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: #120720;
   backdrop-filter: blur(6px);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 999;
@@ -18,17 +19,28 @@ export const Overlay = styled.div`
   }
 `;
 
+export const Description = styled.div`
+  width: 96%;
+  max-width: 600px;
+font-weight:200;
+margin-bottom: 20px;
+h2{
+  font-size: 30px;
+}
+
+p{
+  padding-top: 10px;
+  opacity: 0.7;
+}
+`
+
 export const ModalContainer = styled.div<{ error?: boolean }>`
   background: var(--secondary);
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   padding: 32px;
   border-radius: 16px;
-  max-width: 420px;
-  width: 100%;
-  box-shadow:
-    0 0 30px rgba(157, 78, 221, 0.3),
-    inset 0 0 20px rgba(157, 78, 221, 0.1);
-  animation: scaleIn 0.25s ease;
+  max-width: 600px;
+  width: 96%;
 
   ${({ error }) =>
     error &&
@@ -55,7 +67,7 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
   h2 {
     color: var(--foreground);
     margin-bottom: 8px;
-    font-size: 1.8rem;
+    font-size: 1rem;
   }
 
   h3 {
@@ -94,6 +106,8 @@ export const SeedBox = styled.div`
   line-height: 1.4;
   word-break: break-word;
   position: relative;
+  height: 200px;
+  font-size: 18x;
 
   button {
     position: absolute;
@@ -115,13 +129,15 @@ export const SeedBox = styled.div`
 
 export const CheckRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 10px;
   margin-bottom: 20px;
 
-  span {
+  label {
     color: var(--foreground);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
+    font-weight: 200;
+    margin-top: -4px;
   }
 
   &.error span {

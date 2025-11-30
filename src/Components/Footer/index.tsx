@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import * as S from "./styles";
 
 export function Footer() {
@@ -24,10 +25,8 @@ export function Footer() {
           <S.Section>
             <h4>Product</h4>
             <ul>
-              <li><a href="#">Features</a></li>
-              <li><a href="#">Security</a></li>
-              <li><a href="#">Roadmap</a></li>
-              <li><a href="#">Pricing</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#privacy">Security</a></li>
             </ul>
           </S.Section>
 
@@ -35,21 +34,17 @@ export function Footer() {
           <S.Section>
             <h4>Resources</h4>
             <ul>
-              <li><a href="#">Documentation</a></li>
-              <li><a href="#">API Reference</a></li>
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Community</a></li>
+              <li><S.LinkStyled  to="/Docs">Documentation</S.LinkStyled ></li>
+              <li><S.LinkStyled  to="/Docs">API Reference</S.LinkStyled ></li>
             </ul>
           </S.Section>
 
           {/* Company */}
           <S.Section>
-            <h4>Company</h4>
+            <h4>Community</h4>
             <ul>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a href="https://x.com/veilfi?s=21">X</a></li>
+              <li><a href="https://t.me/VeilFiApp">Telegram</a></li>
             </ul>
           </S.Section>
         </S.Grid>
@@ -59,9 +54,10 @@ export function Footer() {
           <p>© 2025 Veilfi. All rights reserved.</p>
 
           <div className="links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Cookie Policy</a>
+
+            <Link to="/Docs">Privacy Policy</Link>
+            <Link to="/Docs">Terms of Service</Link>
+            <Link to="/Docs">Cookie Policy</Link>
           </div>
         </S.BottomBar>
       </S.Container>

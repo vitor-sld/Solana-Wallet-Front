@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { sizes, fontSizes } from "../../styles";
+import { Link } from "react-router-dom";
 
 export const FooterWrapper = styled.footer`
   background: var(--background);
   border-top: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   padding: 48px 24px;
+  text-align: center;
 `;
 
 export const Container = styled.div`
@@ -36,6 +38,10 @@ export const Brand = styled.div`
     color: var(--muted-foreground);
   }
 `;
+export const LinkStyled = styled(Link)`
+  text-decoration: none;
+
+`
 
 export const Section = styled.div`
   h4 {
@@ -43,6 +49,10 @@ export const Section = styled.div`
     font-weight: 600;
     margin-bottom: 16px;
     font-size: ${fontSizes.medium};
+  }
+  li {
+    text-decoration: none;
+    list-style:none;
   }
 
   ul {
@@ -68,6 +78,7 @@ export const BottomBar = styled.div`
   border-top: 1px solid color-mix(in oklab, var(--primary) 10%, transparent);
 
   display: flex;
+  text-decoration: none;
   flex-direction: column;
   gap: 16px;
 
@@ -96,5 +107,6 @@ export const BottomBar = styled.div`
   .links {
     display: flex;
     gap: 24px;
+    text-decoration: none;
   }
 `;

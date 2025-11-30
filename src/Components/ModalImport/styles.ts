@@ -1,22 +1,7 @@
 // src/Components/ModalImport/styles.ts
 import styled from "styled-components";
-export const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  animation: fadeIn 0.25s ease;
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-`;
-export const ModalContainer = styled.div<{ error?: boolean }>`
+export const ModalContainer = styled.div`
   background: var(--secondary);
   border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
   padding: 32px;
@@ -27,6 +12,10 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
     0 0 30px rgba(157, 78, 221, 0.3),
     inset 0 0 20px rgba(157, 78, 221, 0.1);
   animation: scaleIn 0.25s ease;
+  label{
+  margin-bottom: 10px;
+
+  }
 
   ${({ error }) =>
     error &&
@@ -67,12 +56,16 @@ export const ModalContainer = styled.div<{ error?: boolean }>`
   }
 `;
 
+export const Label = styled.label`
+margin-bottom: 10px;
+`
 
 /* 🔥 CORRIGIDO: era Input, agora é TextArea */
 export const TextArea = styled.textarea`
   width: 100%;
   min-height: 110px;
   resize: none;
+  margin-top: 25px;
 
   background: #101010;
   border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
@@ -115,5 +108,23 @@ export const SecondaryButton = styled.button`
   
   &:hover {
     background: #222;
+  }
+`;
+
+export const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: #120720;
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.25s ease;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 `;

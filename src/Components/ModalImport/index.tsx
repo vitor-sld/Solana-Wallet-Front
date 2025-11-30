@@ -63,7 +63,7 @@ export default function ModalImport({ open, onClose }: Props) {
       <S.ModalContainer onClick={(e) => e.stopPropagation()}>
         <h2>Import Wallet (Solana)</h2>
 
-        <label>Private Key / Seed Phrase</label>
+        <S.Label>Private Key / Seed Phrase</S.Label>
         <S.TextArea
           placeholder="Paste your seed phrase or private key"
           value={input}

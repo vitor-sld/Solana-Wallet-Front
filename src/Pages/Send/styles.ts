@@ -10,13 +10,17 @@ export const PageContainer = styled.div`
   align-items: center;
   background: var(--background);
   color: var(--foreground);
+  display: grid;
+  grid-template-rows: 100px 1fr;
+  justify-content: center;
+  align-items: center;
 `;
 
 
 /* NAVBAR FIXED + RESPONSIVA */
 export const NavBar = styled.div`
-  width: 100%;
-  max-width: 420px;
+  width: 520px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,20 +48,25 @@ export const NavBar = styled.div`
     flex: 1;
     font-size: 1.2rem;
     color: var(--foreground);
+    text-align: center;
   }
 `;
 
 
 export const Box = styled.div`
+margin-top: -50px;
   width: 100%;
+  height: auto;
   max-width: 640px;
   background: rgba(13, 5, 22, 0.6);
   border: 1px solid rgba(157, 78, 221, 0.3);
   padding: 24px;
   border-radius: 16px;
+  text-align: center;
 `;
 
 export const Field = styled.div`
+margin-top: 30px;
   margin-bottom: 14px;
 
   label {
@@ -65,6 +74,7 @@ export const Field = styled.div`
     font-size: 0.85rem;
     color: #cfc6e6;
     margin-bottom: 6px;
+    text-align: left;
   }
 
   input {
@@ -122,3 +132,20 @@ export const Field = styled.div`
     cursor: pointer;
   }
 `;
+
+export const Info = styled.div`
+display: flex;
+margin-top: 20px;
+gap: 10px;
+color:  white;
+padding: 10px;
+background-color:rgba(73, 0, 4, 0.5);
+border-radius: 7px;
+
+.alert{
+  width:16px;
+  stroke: white;
+  
+}
+`
+

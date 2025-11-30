@@ -44,7 +44,7 @@ async function rawFetchWithRetry(
   let json = null;
   try {
     json = text ? JSON.parse(text) : null;
-  } catch {}
+  } catch { }
 
   if (!res.ok) {
     const errMsg = json?.error ?? json?.message ?? `HTTP ${res.status}`;
@@ -55,6 +55,7 @@ async function rawFetchWithRetry(
 }
 
 function requestSingle(key: string, path: string, options?: any) {
+  
   if (inFlight.has(key)) return inFlight.get(key)!;
   const p = rawFetchWithRetry(path, options)
     .then((r) => {
@@ -143,6 +144,12 @@ export default function DepositPage(): React.ReactElement {
   if (!walletAddress) {
     return (
       <S.PageContainer>
+
+        <S.NavBar>
+          <button onClick={() => window.history.back()}>← Back</button>
+          <h2>Deposit</h2>
+          <h2></h2>
+        </S.NavBar>
         <S.Box>
           <h2>Nenhuma carteira conectada</h2>
           <p>Importe sua carteira para depositar SOL.</p>
@@ -153,12 +160,18 @@ export default function DepositPage(): React.ReactElement {
 
   return (
     <S.PageContainer>
+        <S.NavBar>
+          <button onClick={() => window.history.back()}>← Back</button>
+          <h2>Deposit</h2>
+          <h2></h2>
+        </S.NavBar>
+      
       <S.Box>
         <h1>Deposit</h1>
         <p>Send SOL to your personal wallet address:</p>
 
         <S.QrWrapper>
-          <QRCode value={walletAddress} size={180} />
+          <S.QRCodeStyled value={walletAddress} size={180} />
         </S.QrWrapper>
 
         <S.AddrBox>{walletAddress}</S.AddrBox>
@@ -171,26 +184,17 @@ export default function DepositPage(): React.ReactElement {
             marginTop: 12,
           }}
         >
-          <button
-            className="copy"
-            onClick={() => navigator.clipboard.writeText(walletAddress)}
-          >
-            Copy Address
-          </button>
+    <button className="copy" onClick={handleCopy}>
+      {clicked ? "Clicked" : "Copy Address"}
+    </button>
 
-          <button
-            className="refresh"
-            onClick={loadOnce}
-            disabled={loading}
-          >
-            {loading ? "Updating..." : "Atualizar agora"}
-          </button>
+
         </div>
 
         <h3 style={{ marginTop: 20 }}>
           Balance:{" "}
           <strong>
-            {balance !== null ? balance.toFixed(4) + " SOL" : "—"}
+            {balance !== null ? balance.toFixed(4) + " SOL" : "Loading..."}
           </strong>
         </h3>
       </S.Box>

@@ -7,10 +7,10 @@ import { Shield, Eye, Lock, Zap, Key, CheckCircle2 } from "lucide-react";
 
 export function PrivacyFeatures() {
   const [open, setOpen] = useState(false);
-  
+
   const [openCreate, setOpenCreate] = useState(false);
   const [openImport, setOpenImport] = useState(false);
-  
+
   const steps = [
     {
       icon: Shield,
@@ -32,29 +32,29 @@ export function PrivacyFeatures() {
     },
     {
       icon: Zap,
-      title: "Lightning Speed",
+      title: "Instant Tranfers",
       description:
-        "Near instant transactions with low fees. Privacy without compromise."
+        "Built on Solana for lightning-fast transactions. Privacy without compromising on speed."
     },
     {
       icon: Key,
       title: "No KYC Required",
       description:
-        "Start using Veilfi immediately. No identity verification needed."
+        "Create and use your wallet instantly without providing any personal information or documents."
     },
     {
       icon: CheckCircle2,
-      title: "Audited & Secure",
+      title: "Merkle Tree Privacy",
       description:
-        "Independently audited smart contracts and cryptographic implementations."
+        "Advanced commitment schemes ensure mathematical privacy guarantees for every transaction."
     }
   ];
 
   return (
     <S.Section id="privacy">
-      
-              <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
-              <ModalImport open={openImport} onClose={() => setOpenImport(false)} />
+
+      <ModalCreate open={openCreate} onClose={() => setOpenCreate(false)} />
+      <ModalImport open={openImport} onClose={() => setOpenImport(false)} />
       <S.Container>
         <S.Header>
           <h2>Built for Privacy</h2>
@@ -78,12 +78,19 @@ export function PrivacyFeatures() {
         </S.FeaturesGrid>
 
         <S.CTA>
-          <h3>Ready for true privacy?</h3>
-          <p>Join thousands protecting their financial privacy with Veilfi.</p>
+          <h3>Start Using Veilfi Today</h3>
+          <p>Join the future of private finance on Solana. Create your wallet in seconds and experience true financial privacy.</p>
+
+          <S.BtnContainer>
             <PrimaryButton onClick={() => setOpenCreate(true)}>
-              Get Started Now →
+              Create Wallet Now 
             </PrimaryButton>
-          
+            <S.LinkStyle to="/docs">
+              Learn More
+            </S.LinkStyle>
+          </S.BtnContainer>
+
+
         </S.CTA>
       </S.Container>
     </S.Section>

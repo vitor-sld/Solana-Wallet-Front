@@ -45,8 +45,9 @@ export function Header() {
             {/* LINKS DESKTOP */}
             <S.Links>
               <button onClick={() => smoothScroll("#features")}>Features</button>
-              <button onClick={() => smoothScroll("#security")}>Security</button>
-              <button onClick={() => smoothScroll("#docs")}>Docs</button>
+              <button onClick={() => smoothScroll("#privacyTech")}>Security</button>
+              <S.LinkStyled to="/docs" >Docs</S.LinkStyled>
+
             </S.Links>
 
             <PrimaryButton className="mobile-none" onClick={() => setOpenCreate(!openCreate)}>
@@ -74,7 +75,7 @@ export function Header() {
           <div className="links">
             <button onClick={() => smoothScroll("#privacy")}>Verifi</button>
             <button onClick={() => smoothScroll("#privacy")}>Features</button>
-            <a href="https://v0-penta-docs-clone.vercel.app/" onClick={() => smoothScroll("#docs")}>Docs</a>
+            <S.LinkStyled to="/docs" >Docs</S.LinkStyled>
            
             <PrimaryButton onClick={() => setOpenCreate(!openCreate)}>
               Get Started Now →
