@@ -13,7 +13,8 @@ type AuthType = {
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthType>({
+// 🔥 AQUI ESTAVA O ERRO — PRECISA EXPORTAR
+export const AuthContext = createContext<AuthType>({
   session: null,
   loading: true,
   saveWallet: () => {},
@@ -26,7 +27,6 @@ export function AuthProvider({ children }: any) {
 
   useEffect(() => {
     async function load() {
-      // 1️⃣ Carrega do localStorage
       const saved = localStorage.getItem("walletSession");
       if (saved) {
         try {
@@ -35,7 +35,6 @@ export function AuthProvider({ children }: any) {
         } catch {}
       }
 
-      // 2️⃣ (opcional) tente pegar do servidor
       try {
         const res = await getJSON("/session/me");
         if (res.ok && res.user) {

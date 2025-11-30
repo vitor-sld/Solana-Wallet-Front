@@ -3,7 +3,12 @@ import * as S from "./styles";
 import { useAuth } from "../../context/Auth";
 import { postJSON } from "../../services/api";
 
-export default function SendPage() {
+type ModalImportProps = {
+  open: boolean;
+  onClose: () => void;
+};
+
+export default function SendPage({open, onClose}: ModalImportProps) {
   const { session } = useAuth();
 
   const [to, setTo] = useState("");

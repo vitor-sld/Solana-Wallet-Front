@@ -1,6 +1,8 @@
 import * as bip39 from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { Keypair } from "@solana/web3.js";
+import bs58 from "bs58";
+
 
 export function importAnyWallet(input: string) {
   const text = input.trim();

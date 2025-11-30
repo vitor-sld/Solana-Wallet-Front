@@ -121,3 +121,30 @@ export const Overlay = styled.div`
     to { opacity: 1; }
   }
 `;
+
+export const PageContainer = styled.div`
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+export const Box = styled.div`
+  background: var(--secondary);
+  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
+  box-shadow:
+    0 0 30px rgba(157, 78, 221, 0.3),
+    inset 0 0 20px rgba(157, 78, 221, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  width: 90%;
+  max-width: 420px;
+  animation: scaleIn 0.25s ease;
+
+  @keyframes scaleIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+`;
