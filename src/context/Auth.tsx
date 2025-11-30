@@ -1,69 +1,56 @@
+// src/context/Auth.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { getJSON } from "../services/api";
 
 type SessionData = {
   walletAddress: string | null;
   walletSecret: number[] | null;
 };
 
-type AuthContextType = {
+type AuthType = {
   session: SessionData | null;
   loading: boolean;
-  setSession: (data: SessionData | null) => void;
+  setSession: (s: SessionData | null) => void;
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthType>({
   session: null,
   loading: true,
   setSession: () => {},
   logout: () => {},
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSessionState] = useState<SessionData | null>(null);
+export function AuthProvider({ children }: any) {
+  const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  /* ===========================================================
-      SALVAR SESSÃO NO LOCALSTORAGE
-  ============================================================ */
-  function setSession(data: SessionData | null) {
-    setSessionState(data);
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await getJSON("/session/me");
 
-    if (data) {
-      localStorage.setItem("veilfi_session", JSON.stringify(data));
-    } else {
-      localStorage.removeItem("veilfi_session");
+        if (res?.ok && res?.user) {
+          setSession({
+            walletAddress: res.user.walletPubkey || null,
+            walletSecret: res.user.secretKey || null,
+          });
+        } else {
+          setSession(null);
+        }
+      } catch (e) {
+        setSession(null);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
 
-  /* ===========================================================
-      LOGOUT
-  ============================================================ */
+    load();
+  }, []);
+
   function logout() {
     setSession(null);
   }
-
-  /* ===========================================================
-      RESTAURAR SESSÃO AO INICIAR A PÁGINA
-  ============================================================ */
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("veilfi_session");
-
-      if (saved) {
-        const parsed = JSON.parse(saved);
-
-        setSessionState({
-          walletAddress: parsed.walletAddress || null,
-          walletSecret: parsed.walletSecret || null,
-        });
-      }
-    } catch (err) {
-      console.error("Failed to restore saved session", err);
-    }
-
-    setLoading(false);
-  }, []);
 
   return (
     <AuthContext.Provider value={{ session, loading, setSession, logout }}>
